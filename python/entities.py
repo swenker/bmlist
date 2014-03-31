@@ -8,7 +8,9 @@ class User(object):
         self.nickname=''
         self.cellphone=''
         self.status=1
-        
+
+    def __str__(self):
+        return "id:%d,email:%s,status:%d" %(self.id,self.email,self.status)
 
 class Book(object):
     def __init__(self):
@@ -37,8 +39,10 @@ class Book(object):
 
     def __unicode__(self):
         return "id:%s,isbn10:%s,isbn13:%s,title:%s,subtitle:%s,author:%s,translators:%s,binding:%s,"\
-        "publisher:%s,pubdate:%s,price:%f,pages:%d,update_time:%s,quantity:%d,series:%s,keywords:%s,summary:%s,authorintro:%s" \
+        "publisher:%s,pubdate:%s,price:%f,pages:%d,update_time:%s,create_time:%s,quantity:%d,series:%s,keywords:%s,summary:%s,authorintro:%s" \
         % (self.id,self.isbn10,self.isbn13,self.title,self.subtitle,self.author,";".join(self.translators), self.binding,\
-           self.publisher,self.pubdate,self.price,self.pages,self.update_time,self.quantity,self.series,self.keywords,self.summary,self.authorintro)
+           self.publisher,self.pubdate,self.price,self.pages,self.update_time,self.create_time,self.quantity,self.series,"","","")
+           #self.publisher,self.pubdate,self.price,self.pages,self.update_time,self.create_time,self.quantity,self.series,self.keywords,self.summary,self.authorintro)
+
         
         

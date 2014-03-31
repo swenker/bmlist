@@ -7,6 +7,7 @@ from bookparser import BookParser
 
 urls=(
     '/bm','Home',
+    '/bm/s','PrintService',
     '/bm/user/signin','UserSignin',
     '/bm/book/check','CheckBook',
     '/bm/book/list/(\d*)','ListBooks',
@@ -27,6 +28,11 @@ bookservice = BookService()
 class Home():
     def GET(self):
         return render.index()
+
+class PrintService():
+    def GET(self):
+        return urls
+
 
 def updatesession(user):
     session.bmuser=user

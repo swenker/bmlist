@@ -8,6 +8,7 @@ from datetime import datetime
 from entities  import User,Book
 from bookparser import BookParser
 import web
+from savedbookparser import SavedBookParser
 
 TABLE_USERBOOK="bm_user_book"
 TABLE_BOOK="bm_book"
@@ -16,6 +17,7 @@ STATUS_DELETE=0
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 db = web.database(dbn="mysql",db="bmlist-test",host="demodb01.qasvc.mscc.cn",user="bmlist",passwd="bmlist1",charset='utf8')
+db = web.database(dbn="mysql",db="bmlist",host="localhost",user="bmlist",passwd="bmlist1",charset='utf8')
 
 
 
@@ -53,7 +55,7 @@ class BookService(object):
         sqls="select a.bid,isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,update_time,create_time,quantity,\
                        series,keywords,summary \
                        from "+TABLE_USERBOOK+" a right join "+TABLE_BOOK+" b on a.bid=b.bid where a.uid=%d limit %d,%d" % (uid,start,end)
-        print sqls            
+        #print sqls
         result= db.query(sqls)
         
         books=[]
@@ -109,6 +111,8 @@ class BookService(object):
         return book
 
 
+    def getbookbyisbnfromremote(self,isbn):
+        return self.bookParser.parsebookbyisbn(isbn)
 
     def insert_book(self,isbn,uid):
         "get book by isbn from douban and insert it into local db"
@@ -128,7 +132,7 @@ class BookService(object):
                     self.add_userbook(uid,bid)
             else:
                 #compose book here
-                book = self.bookParser.parsebookbyisbn(isbn)
+                book = self.getbookbyisbnfromremote(isbn)
                 
                 if book :   
                     bid = self.create_book(book)
@@ -175,12 +179,17 @@ class BookService(object):
 
     def create_book(self,book):
 
-        sqls="INSERT INTO %s(isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,create_time,quantity,\
-        series,keywords,summary)values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%d','%s','%s','%s')" \
-        %(TABLE_BOOK,book.isbn10,book.isbn13,book.title,book.subtitle,book.author,";".join(book.translators),book.publisher,book.pubdate,\
-        book.price,book.pages,datetime.now().strftime(TIME_FORMAT),book.quantity,book.series,book.keywords,book.summary)
+        #sqls="INSERT INTO %s(isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,create_time,quantity,\
+        #series,keywords,summary)values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%d','%s','%s','%s')" \
+        #%(TABLE_BOOK,book.isbn10,book.isbn13,book.title,book.subtitle,book.author,";".join(book.translators),book.publisher,book.pubdate,\
+        #book.price,book.pages,datetime.now().strftime(TIME_FORMAT),book.quantity,book.series,book.keywords,book.summary)
         
-        print sqls
+        sqls="INSERT INTO %s(isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,create_time,quantity,\
+        series)values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%d','%s')" \
+        %(TABLE_BOOK,book.isbn10,book.isbn13,book.title,book.subtitle,book.author,";".join(book.translators),book.publisher,book.pubdate,\
+        book.price,book.pages,datetime.now().strftime(TIME_FORMAT),book.quantity,book.series)
+
+        #print sqls
         
         db.query(sqls)
         
@@ -217,6 +226,26 @@ class BookService(object):
         "remove book from user book list"
         sqls="DELETE FROM %s WHERE `uid`=%d and `bid`=%d" %(TABLE_USERBOOK,uid,bid)
         db.query(sqls)
+
+    def importbook(self):
+        parser = SavedBookParser()
+        file=r"D:\work\projects\111-tech-bmlist\booklist.xml"
+        parser.parsesavedbook(file)
+
+        isbnlist=parser.isbnlist
+        print len(isbnlist)
+        isbnfailed=[]
+        for isbn in isbnlist:
+            #print isbn
+            book = None
+            try:
+                book =self.getbookbyisbnfromremote(isbn)
+                #self.create_book(book)
+            except:
+                isbnfailed.append(isbn)
+                print isbn,book
+        print "======complete======"
+        print isbnfailed
 
 
 

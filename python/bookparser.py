@@ -19,13 +19,15 @@ def search_book(isbn):
 
 class SimpleHandler(sax.ContentHandler):
     "simple sax handler to parse the xml from douban"
-    def __init__(self,bookHolder):
+    def __init__(self):
         self.buffer = []
-        self.book = bookHolder
         self.itemName = ""
-        self.pPages = re.compile("([0-9]+)\\D*");
-        self.pPrice = re.compile("([0-9]*\\.[0-9]{0,2})(\\D*)");
+        self.pPages = re.compile("([0-9]+)\\D*")
+        self.pPrice = re.compile("([0-9]*\\.[0-9]{0,2})(\\D*)")
 
+    def startDocument(self):
+        #print "Here....."
+        self.book = Book()
 
     def startElement(self,name, attrs):
         self.buffer = []
@@ -46,8 +48,7 @@ class SimpleHandler(sax.ContentHandler):
             elif ("title" ==self.itemName):                
                 self.book.title = "".join(self.buffer)
 
-            elif ("subtitle" ==self.itemName):                
-
+            elif ("subtitle" ==self.itemName):
                 self.book.subtitle = "".join(self.buffer)
                 
             elif ("author" ==self.itemName):                
@@ -74,7 +75,6 @@ class SimpleHandler(sax.ContentHandler):
             elif ("author-intro" == self.itemName):                
                 self.book.authorintro = "".join(self.buffer)
 
-                
             #there maybe multiple translators    
             elif ("translator" == self.itemName):                
                 self.book.translators.append("".join(self.buffer))
@@ -89,7 +89,6 @@ class SimpleHandler(sax.ContentHandler):
                 if (matcher):
                     self.book.pages = int(matcher.group(1))
 
-
             elif ("price" == self.itemName):       
          
                 self.book.price = 0.0
@@ -97,30 +96,36 @@ class SimpleHandler(sax.ContentHandler):
                 
                 if matcher :
                     self.book.price = float(matcher.group(1))
+
         elif('summary' == name):
                 self.book.summary = "".join(self.buffer)
         
     def characters(self,content):        
         self.buffer.append(content.strip())
 
+    def getresult(self):
+        return self.book
 
 class BookParser(object):
      def __init__(self):
-         self.book = Book()
          self.parser=sax.make_parser()
-         self.parser.setContentHandler(SimpleHandler(self.book))
-       
+         self.xmlHandler=SimpleHandler()
+         self.parser.setContentHandler(self.xmlHandler)
+
+
      #url or filepath    
      def parsebook(self,xmlResource):
          self.parser.parse(xmlResource)
 
-         return self.book
+         return self.xmlHandler.getresult()
     
      def parsebookbyisbn(self,isbn):
+         url = SERVICE_URL+isbn
+         #print url
+         self.parser.parse(url)
 
-         self.parser.parse(SERVICE_URL+isbn)
+         return self.xmlHandler.getresult()
 
-         return self.book
 
 if __name__=='__main__':
     print "module debug.."       
@@ -128,7 +133,7 @@ if __name__=='__main__':
     xmlfile = r"D:\work\projects\bmlist\python\isbn.xml"
     #print bookParser.parseBook(xmlfile).__unicode__()
     #print bookParser.parseBook("http://api.douban.com/book/subject/isbn/"+'9787508353944').__unicode__()        
-    print bookParser.parsebookbyisbn('9787508353944').__unicode__()
+    print bookParser.parsebookbyisbn('9787508353944')
     
 #print search_book('9787508353944')
 
