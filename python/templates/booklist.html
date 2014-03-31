@@ -1,0 +1,27 @@
+$def with(booklist)
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Book List</title>
+</head>
+<body>
+<div style="width:100%">
+    $if(booklist):
+        <table border="1">
+
+            <thead>
+                <td>ISBN</td><td>Title</td><td>Author</td><td>Publisher</td><td>Price</td>
+            </thead>
+            $for book in booklist:
+                <tr>
+                    <td><a href="/bm/book/get/$book.id">$book.isbn13</a> </td><td>$book.title</td><td>$book.author</td><td>$book.publisher</td><td>$book.price</td>
+                </tr>
+        </table>
+    $else:
+        Nothing.
+</div>
+</body>
+</html>
