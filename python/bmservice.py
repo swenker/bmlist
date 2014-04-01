@@ -9,6 +9,8 @@ from entities  import User,Book
 from bookparser import BookParser
 import web
 from savedbookparser import SavedBookParser
+from ConfigParser import ConfigParser
+import decimal
 
 TABLE_USERBOOK="bm_user_book"
 TABLE_BOOK="bm_book"
@@ -16,10 +18,20 @@ TABLE_USER="bm_user"
 STATUS_DELETE=0
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
-db = web.database(dbn="mysql",db="bmlist-test",host="demodb01.qasvc.mscc.cn",user="bmlist",passwd="bmlist1",charset='utf8')
-db = web.database(dbn="mysql",db="bmlist",host="localhost",user="bmlist",passwd="bmlist1",charset='utf8')
 
+class BmConfig():
+    def __init__(self):
+        configparser=ConfigParser()
+        configparser.read("bmlist.cfg")
+        self.dbn=configparser.get('db','dbn','mysql')
+        self.host=configparser.get('db','host','mysql')
+        self.db=configparser.get('db','db','bmlist')
+        self.user=configparser.get('db','user','bmlist')
+        self.passwd=configparser.get('db','passwd','bmlist1')
 
+bmconfig = BmConfig()
+db = web.database(dbn=bmconfig.dbn,db=bmconfig.db,host=bmconfig.host,user=bmconfig.user,passwd=bmconfig.passwd,charset='utf8')
+decimal.getcontext().prec=2
 
 class UserService():
 
@@ -53,9 +65,11 @@ class BookService(object):
         "list the books of a given user by uid"
 
         sqls="select a.bid,isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,update_time,create_time,quantity,\
-                       series,keywords,summary \
-                       from "+TABLE_USERBOOK+" a right join "+TABLE_BOOK+" b on a.bid=b.bid where a.uid=%d limit %d,%d" % (uid,start,end)
-        #print sqls
+                       series,keywords,summary,b.status \
+                       from "+TABLE_USERBOOK+" a right join "+TABLE_BOOK+" b on a.bid=b.bid where a.uid=%d" %(uid)
+
+        if end>1:
+            sqls+= "limit %d,%d" % (start,end)
         result= db.query(sqls)
         
         books=[]
@@ -71,12 +85,12 @@ class BookService(object):
     def list_books(self,start,end):
         "list the books "
         sqls="select bid,isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,update_time,create_time,quantity,\
-                       series,keywords,summary \
-                       from "+TABLE_BOOK+" limit %d,%d" % (start,end)
-                    
-        result = db.query(sqls)
+                       series,keywords,summary,status \
+                       from "+TABLE_BOOK
+        if end>1:
+               sqls+=" limit %d,%d" % (start,end)
 
-        #print result[1]
+        result = db.query(sqls)
 
         books=[]
         if result:
@@ -107,6 +121,7 @@ class BookService(object):
         book.series = r['series']
         book.keywords = r['keywords']
         book.summary = r['summary']
+        book.status = r['status']
 
         return book
 
@@ -166,7 +181,7 @@ class BookService(object):
     def get_book_byid(self,bid):
 
         sqls = "SELECT bid,isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,update_time,create_time,quantity,\
-        series,keywords,summary FROM %s WHERE bid = %s" %(TABLE_BOOK,bid)
+        series,keywords,summary,status FROM %s WHERE bid = %s" %(TABLE_BOOK,bid)
 
         result = db.query(sqls)
 
@@ -179,11 +194,14 @@ class BookService(object):
 
     def create_book(self,book):
 
+        if book.id and book.id>0:
+            print "should go to update..."
+            return
         #sqls="INSERT INTO %s(isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,create_time,quantity,\
         #series,keywords,summary)values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%d','%s','%s','%s')" \
         #%(TABLE_BOOK,book.isbn10,book.isbn13,book.title,book.subtitle,book.author,";".join(book.translators),book.publisher,book.pubdate,\
         #book.price,book.pages,datetime.now().strftime(TIME_FORMAT),book.quantity,book.series,book.keywords,book.summary)
-        
+
         sqls="INSERT INTO %s(isbn10,isbn13,title,subtitle,author,translators,publisher,pubdate,price,pages,create_time,quantity,\
         series)values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%d','%s','%d','%s')" \
         %(TABLE_BOOK,book.isbn10,book.isbn13,book.title,book.subtitle,book.author,";".join(book.translators),book.publisher,book.pubdate,\
@@ -205,21 +223,33 @@ class BookService(object):
         sqls="INSERT INTO %s (uid,bid,status)values('%d','%d',1)" % (TABLE_USERBOOK,uid,bid)
         db.query(sqls)
 
+    def updatebook(self,book):
+        bid=book.id
+        db.update(TABLE_BOOK,where="bid=$bid",vars=locals(),isbn10=book.isbn10,isbn13=book.isbn13,title=book.title,subtitle=book.subtitle,author=book.author,translators=";".join(book.translators),
+                  publisher=book.publisher,pubdate=book.pubdate,price=book.price,pages=book.pages,update_time=datetime.now().strftime(TIME_FORMAT),quantity=book.quantity,series=book.series)
+
     def remove_book(self,bid,hard=False):
-        if not hard:
-            sqls="UPDATE %s SET `status`=%d where bid=%d" % (TABLE_BOOK,0,bid)
-            db.query(sqls)
+        t=db.transaction()
+        try:
+            if not hard:
+                sqls="UPDATE %s SET `status`=%d where bid=%d" % (TABLE_BOOK,0,bid)
+                db.query(sqls)
 
-            #TODO is it more elegant to copy title to this table?
-            sqls='UPDATE %s SET `status`=%d where bid=%d' % (TABLE_USERBOOK,0,bid)
-            db.query(sqls)
+                #TODO is it more elegant to copy title to this table?
+                sqls='UPDATE %s SET `status`=%d where bid=%d' % (TABLE_USERBOOK,0,bid)
+                db.query(sqls)
+            else:
+                 sqls="DELETE FROM %s where bid=%d" % (TABLE_BOOK,bid)
+                 db.query(sqls)
+
+                 #TODO is is more elegant to copy title to this table?
+                 sqls='DELETE FROM %s where bid=%d' % (TABLE_USERBOOK,bid)
+                 db.query(sqls)
+        except Exception ,e:
+            print e
+            t.rollback()
         else:
-             sqls="DELETE FROM %s where bid=%d" % (TABLE_BOOK,bid)
-             db.query(sqls)
-
-             #TODO is is more elegant to copy title to this table?
-             sqls='DELETE FROM %s where bid=%d' % (TABLE_USERBOOK,bid)
-             db.query(sqls)
+            t.commit()
 
      
     def remove_userbook(self,uid,bid):
@@ -229,7 +259,7 @@ class BookService(object):
 
     def importbook(self):
         parser = SavedBookParser()
-        file=r"D:\work\projects\111-tech-bmlist\booklist.xml"
+        file="booklist.xml"
         parser.parsesavedbook(file)
 
         isbnlist=parser.isbnlist
@@ -240,14 +270,33 @@ class BookService(object):
             book = None
             try:
                 book =self.getbookbyisbnfromremote(isbn)
-                #self.create_book(book)
-            except:
+                self.create_book(book)
+            except Exception,e:
                 isbnfailed.append(isbn)
-                print isbn,book
+                print isbn,book,e
         print "======complete======"
         print isbnfailed
 
+    def exportbook(self):
+        booklist=self.list_books(0,1000)
 
+        xmlstr="""<?xml version="1.0" encoding="UTF-8"?>"""
+
+        xmlstr+="<books>"
+
+        for b in booklist:
+            bstr="<book><isbn10>%s</isbn10><isbn13>%s</isbn13><title>%s</title><author>%s</author><publisher>%s</publisher><pubdate>%s</pubdate><pages>%d</pages><price>%f</price></book>\n"\
+                 %(b.isbn10,b.isbn13,b.title,b.author,b.publisher,b.pubdate,b.pages,b.price)
+
+            xmlstr+=bstr
+
+        xmlstr+="</books>"
+
+        print xmlstr
+        xmlfile=r"D:\work\projects\111-tech-bmlist\bmfile.xml"
+        with open(xmlfile,'w') as f:
+            f.write(xmlstr.encode("utf-8"))
+        f.close()
 
 def display_books(books):
     for book in books:

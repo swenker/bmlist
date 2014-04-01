@@ -1,10 +1,12 @@
 __author__ = 'samsung'
 
 import web
-from entities import User
+from entities import *
 from bmservice import UserService,BookService
 from bookparser import BookParser
+from decimal import *
 
+URL_CREATE='/bm/book/create'
 urls=(
     '/bm','Home',
     '/bm/s','PrintService',
@@ -12,8 +14,10 @@ urls=(
     '/bm/book/check','CheckBook',
     '/bm/book/list/(\d*)','ListBooks',
     '/bm/book/get/(\d+)', 'GetBook',
-    '/bm/book/create','CreateBook',
-    '/bm/book/delete?bid= [need to check privileges,only admin can do this]','DeleteBook',
+    '/bm/book/editform/(\d+)', 'EditBook',
+    '/bm/book/edit', 'EditBook',
+    URL_CREATE,'CreateBook',
+    '/bm/book/delete/(\d+)','DeleteBook',
     '/bm/book/add?bid=23','AddBook'
 )
 
@@ -71,44 +75,91 @@ class ListBooks():
 
         booklist=None
         start=0
-        end=1000
+        end=-1
         if(not uid):
             booklist = bookservice.list_books(start,end)
 
-        elif uid>0:
-            booklist = bookservice.list_user_books(int(uid),start,end)
+        else:
+            booklist = bookservice.list_user_books(uid,start,end)
 
         return render.booklist(booklist)
 
 class CheckBook():
-    def GET(self,isbn=None):
+    def GET(self):
         params = web.input()
         isbn = params.isbn
 
         bookparser = BookParser()
         book = bookparser.parsebookbyisbn(isbn)
-
-        return render.book(book,isbn)
-
+        if(not book):
+            book=Book()
+        return render.bookedit(book,URL_CREATE)
+        #else:
+        #    return "Not Found By ISBN:"+isbn
 
 class GetBook():
     def GET(self,bid):
         book = bookservice.get_book_byid(bid)
 
-        return render.book(book,book.isbn13)
+        return render.bookview(book)
+
+class EditBook():
+    aurl="/bm/book/edit"
+    def GET(self,bid):
+        book = bookservice.get_book_byid(bid)
+        return render.bookedit(book,EditBook.aurl)
+
+    def POST(self):
+        params=web.input()
+        bid=params.bid
+
+        book = bookservice.get_book_byid(bid)
+        book.title=params.title
+        book.subtitle=params.subtitle
+        book.isbn10=params.isbn10
+        book.isbn13=params.isbn13
+        book.author=params.author
+        if(params.translators):
+            book.translators = params.translators.split(";")
+        #book.translators=params.translators
+        book.publisher=params.publisher
+        book.pubdate=params.pubdate
+        book.price=Decimal(params.price)
+        book.quantity=params.quantity
+        book.series = params.series
+
+        bookservice.updatebook(book)
+
+        return render.bookedit(book,EditBook.aurl)
 
 
 #TODO not implemented at the moment,because most of the book will be get from douban
 class CreateBook():
+    def GET(self):
+        book=Book()
+        return render.bookedit(book,URL_CREATE)
+
     def POST(self):
         #if uid is not null then add it to user at the same time
         params = web.input()
         uid =1
-        isbn = params.isbn
+        book=Book()
+        book.title=params.title
+        book.subtitle=params.subtitle
+        book.isbn10=params.isbn10
+        book.isbn13=params.isbn13
+        book.author=params.author
+        book.translators.append(params.translators)
+        book.publisher=params.publisher
+        book.pubdate=params.pubdate
+        book.price=Decimal(params.price)
+        book.quantity=int(params.quantity)
+        book.pages = int(params.pages)
+        book.series = params.series
 
-        bookservice.insert_book(isbn,uid)
+        bookservice.create_book(book)
 
-        return "OK"
+        return render.common("OK")
 
 class AddBook():
     def POST(self):
@@ -118,14 +169,13 @@ class AddBook():
         bid=params.bid
         bookservice.add_userbook(uid,bid)
 
-        return "OK"
+        return render.common("OK")
 
 class DeleteBook():
-    def POST(self):
-        params = web.input()
-        bid = params.bid
+    def GET(self,bid):
+        bookservice.remove_book(int(bid))
 
-
+        return render.common("OK")
 
 if __name__=="__main__":
     app.run()

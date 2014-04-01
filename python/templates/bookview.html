@@ -1,0 +1,67 @@
+$def with(book)
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+<div>
+<table border="1" >
+    $if(book):
+        <tr>
+            <td>bid</td><td>$book.id</td>
+        </tr>
+        <tr>
+            <td style="width:60">title</td><td>$book.title</td>
+        </tr>
+        <tr>
+            <td>isbn10</td><td>$book.isbn10</td>
+        </tr>
+        <tr>
+            <td>isbn13</td><td>$book.isbn13</td>
+        </tr>
+        <tr>
+            <td>subtitle</td><td>$book.subtitle</td>
+        </tr>
+        <tr>
+            <td>author</td><td>$book.author</td>
+        </tr>
+        <tr>
+            <td>translators</td><td>$book.translators</td>
+        </tr>
+        <tr>
+            <td>publisher</td><td>$book.publisher</td>
+        </tr>
+        <tr>
+            <td>pubdate</td><td>$book.pubdate</td>
+        </tr>
+        <tr>
+            <td>price</td><td>$book.price</td>
+        </tr>
+        <tr>
+            <td>pages</td><td>$book.pages</td>
+        </tr>
+        <tr>
+            <td>quantity</td><td>$book.quantity</td>
+        </tr>
+        <tr>
+            <td>series</td><td>$book.series</td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                  <a href="/bm/book/editform/$book.id">Edit</a>
+            </td>
+        </tr>
+    $else:
+        <tr>
+            <td colspan="2">
+                  Not found, <a href="/bm/book/create">Create it</a>
+            </td>
+        </tr>
+</table>
+</div>
+</body>
+</html> 

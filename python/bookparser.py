@@ -115,14 +115,21 @@ class BookParser(object):
 
      #url or filepath    
      def parsebook(self,xmlResource):
-         self.parser.parse(xmlResource)
-
+         try:
+             self.parser.parse(xmlResource)
+         except Exception,e:
+             print e
+             return None
          return self.xmlHandler.getresult()
     
      def parsebookbyisbn(self,isbn):
          url = SERVICE_URL+isbn
          #print url
-         self.parser.parse(url)
+         try:
+             self.parser.parse(url)
+         except sax.SAXParseException,e:
+             print e
+             return None
 
          return self.xmlHandler.getresult()
 
@@ -133,7 +140,7 @@ if __name__=='__main__':
     xmlfile = r"D:\work\projects\bmlist\python\isbn.xml"
     #print bookParser.parseBook(xmlfile).__unicode__()
     #print bookParser.parseBook("http://api.douban.com/book/subject/isbn/"+'9787508353944').__unicode__()        
-    print bookParser.parsebookbyisbn('9787508353944')
+    print bookParser.parsebookbyisbn('978750835394')
     
 #print search_book('9787508353944')
 

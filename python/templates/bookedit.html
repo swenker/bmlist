@@ -1,0 +1,71 @@
+$def with(book,aurl)
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+<div>
+<form action="$aurl" method="post">
+<table border="1">
+
+    <tr>
+        <td>bid</td><td>$book.id</td>
+    </tr>
+
+    <tr>
+        <td>title</td><td><input type="text" name="title" value="$book.title"/></td>
+    </tr>
+    <tr>
+        <td>isbn10</td><td><input type="text" name="isbn10" value="$book.isbn10"/></td>
+    </tr>
+    <tr>
+        <td>isbn13</td><td><input type="text" name="isbn13" value="$book.isbn13"/></td>
+    </tr>
+    <tr>
+        <td>subtitle</td><td><input type="text" name="subtitle" value="$book.subtitle"/></td>
+    </tr>
+    <tr>
+        <td>author</td><td><input type="text" name="author" value="$book.author"/></td>
+    </tr>
+    <tr>
+        <td>translators</td><td><input type="text" name="translators" value="$book.translators"/></td>
+    </tr>
+    <tr>
+        <td>publisher</td><td><input type="text" name="publisher" value="$book.publisher"/></td>
+    </tr>
+    <tr>
+        <td>pubdate</td><td><input type="text" name="pubdate" value="$book.pubdate"/></td>
+    </tr>
+    <tr>
+        <td>price</td><td><input type="text" name="price" value="$book.price"/></td>
+    </tr>
+    <tr>
+        <td>pages</td><td><input type="text" name="pages" value="$book.pages"/></td>
+    </tr>
+    <tr>
+        <td>quantity</td><td><input type="text" name="quantity" value="$book.quantity"/></td>
+    </tr>
+    <tr>
+        <td>series</td><td><input type="text" name="series" value="$book.series"/></td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+                <input type="hidden" name="bid" value="$book.id"/>
+                <input type="submit" value="Submit">
+        </td>
+    </tr>
+
+
+</table>
+</form>
+    <a href="/bm/book/list/">to list</a>
+</div>
+</body>
+</html> 
