@@ -5,13 +5,23 @@ $def with(book)
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+        $if(book):
+            $book.title
+    </title>
 </head>
 <body>
 <div>
 <table border="1" >
     $if(book):
         <tr>
-            <td>bid</td><td>$book.id</td>
+            <td>bid</td>
+            <td>
+                $if book.id>0:
+                    <b>$book.id</b>
+                $else:
+                    $book.id
+            </td>
         </tr>
         <tr>
             <td style="width:60">title</td><td>$book.title</td>
@@ -52,16 +62,23 @@ $def with(book)
 
         <tr>
             <td colspan="2">
-                  <a href="/bm/book/editform/$book.id">Edit</a>
+                  <a href="/bm/book/edit?bid=$book.id">Edit</a>
             </td>
         </tr>
     $else:
         <tr>
             <td colspan="2">
-                  Not found, <a href="/bm/book/create">Create it</a>
+                  Not found, <a href="/bm/book/create">Create New Book</a>
             </td>
         </tr>
 </table>
+    <a href="/bm/book/list">to list</a>
+<form action="/bm/book/check" method="GET">
+ISBN:<input type="text" size="20" name="isbn"/>
+<input type="submit" value="check"/>
+</form>
+
 </div>
+
 </body>
 </html> 

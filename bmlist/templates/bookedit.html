@@ -8,12 +8,16 @@ $def with(book,aurl)
     <script type="text/javascript">
 
     </script>
+    <title>Book Edit Form</title>
 </head>
 <body>
 <div>
 <form action="$aurl" method="post">
 <table border="1">
 
+    <tr>
+        <td colspan="2">Book Info</td>
+    </tr>
     <tr>
         <td>bid</td><td>$book.id</td>
     </tr>
@@ -34,7 +38,7 @@ $def with(book,aurl)
         <td>author</td><td><input type="text" name="author" value="$book.author"/></td>
     </tr>
     <tr>
-        <td>translators</td><td><input type="text" name="translators" value="$book.translators"/></td>
+        <td>translators</td><td><input type="text" name="translators" value="$book.transtr"/></td>
     </tr>
     <tr>
         <td>publisher</td><td><input type="text" name="publisher" value="$book.publisher"/></td>
@@ -57,15 +61,19 @@ $def with(book,aurl)
 
     <tr>
         <td colspan="2">
+            $if book.id:
                 <input type="hidden" name="bid" value="$book.id"/>
-                <input type="submit" value="Submit">
+                <input type="submit" value="Save">
+            $else:
+                <input type="hidden" name="bid" value="$book.id"/>
+                <input type="submit" value="Create">
         </td>
     </tr>
 
 
 </table>
 </form>
-    <a href="/bm/book/list/">to list</a>
+    <a href="/bm/book/list">to list</a>
 </div>
 </body>
 </html> 

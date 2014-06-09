@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:db="http://www.douban.com/xmlns/" xmlns:gd="http://schemas.google.com/g/2005" xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/" xmlns:opensearch="http://a9.com/-/spec/opensearchrss/1.0/">
+	<id>http://api.douban.com/book/subject/2023013</id>
+	<title>倘若我在彼岸</title>
+	<category scheme="http://www.douban.com/2007#kind" term="http://www.douban.com/2007#book"/>
+	<author>
+		<name>PIAN SHAN GONG</name>
+	</author>
+	<link href="http://api.douban.com/book/subject/2023013" rel="self"/>
+	<link href="http://book.douban.com/subject/2023013/" rel="alternate"/>
+	<link href="http://img5.douban.com/spic/s9097939.jpg" rel="image"/>
+	<link href="http://m.douban.com/book/subject/2023013/" rel="mobile"/>
+	<summary>《倘若我在彼岸》是作者在《在世界中心呼唤爱》后的首部爱情小说集。片山恭一，学生时代通读了包括夏目漱石和大江健三郎在内的日本近现代文学全集，同时读了从笛卡尔、莱布尼茨到结构主义的欧洲近现代哲学，也读了马克思。自二十二三岁开始创作小说，《气息》、《世界在你不知道的地方运转》、《别相信约翰·列侬》等均为他的代表作。</summary>
+	<db:attribute name="isbn10">7543639130</db:attribute>
+	<db:attribute name="isbn13">9787543639133</db:attribute>
+	<db:attribute name="title">倘若我在彼岸</db:attribute>
+	<db:attribute name="pages">193</db:attribute>
+	<db:attribute name="author">PIAN SHAN GONG</db:attribute>
+	<db:attribute name="price">14.00元</db:attribute>
+	<db:attribute name="publisher">青岛出版社</db:attribute>
+	<db:attribute name="binding">Paperback</db:attribute>
+	<db:attribute name="pubdate">2007-1</db:attribute>
+	<db:tag count="95" name="片山恭一"/>
+	<db:tag count="45" name="日本文学"/>
+	<db:tag count="29" name="日本"/>
+	<db:tag count="26" name="小说"/>
+	<db:tag count="14" name="爱情"/>
+	<db:tag count="13" name="倘若我在彼岸"/>
+	<db:tag count="11" name="日本小说"/>
+	<db:tag count="11" name="纯爱"/>
+	<gd:rating average="7.4" max="10" min="0" numRaters="196"/>
+</entry>
