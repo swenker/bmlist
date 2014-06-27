@@ -3,7 +3,7 @@ __author__ = 'samsung'
 import unittest
 import logging
 import logging.config
-from bmlist.bmservice import BookService
+from bmlist.bmservice import *
 
 logging.config.fileConfig(r"conf/local/log.cfg")
 
@@ -15,6 +15,10 @@ class TestAccountService(unittest.TestCase):
         logger.warn("Hello,I am log")
         #logging.warn("Hello,I am log")
         self.assertEqual(1,1)
+
+    def test_signin(self):
+        self.assertTrue(AccountService().signin('swenker@126.com','koob'))
+        self.assertIsNone(AccountService().signin('swenker@126.com','koob1'))
 
     def test_signup(self):
         pass

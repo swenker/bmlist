@@ -54,4 +54,7 @@ cd bmlist && nohup python bmweb.py &
 mysql -ubmlist -pbmlist1 -hdemodb01.qasvc.mscc.cn -Dbmlist --default-character-set=utf8 -e 'select isbn13,count(1) from bm_book group by isbn13 having count(1)>1'
 mysqldump -ubmlist -pbmlist1 -hdemodb01.qasvc.mscc.cn --skip-add-drop-table --skip-extended-insert --default-character-set=utf8 bmlist>20140609.dump
 
+git tag -a 1.0.0 -m "Initial release with data"
+git push origin --tags
+
 

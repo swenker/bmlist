@@ -4,9 +4,10 @@
     <title></title>
 </head>
 <body>
-<form action="signin" method="POST">
-    email:<input type="text" name="email" size="20" maxlength="50"/> <br/>
-    passwd:<input type="password" name="passwd" size="20" maxlength="50"/> <br/>
+Signin,Please!<br/>
+<form action="/bm/u/signin" method="POST" autocomplete="on">
+    email:<input type="email" name="email" size="20" maxlength="50" required="true"/> <br/>
+    passwd:<input type="password" name="passwd" size="20" maxlength="50"  required="true"/> <br/>
     <input type="submit" name="signin" value="SignIn">
 </form>
 </body>

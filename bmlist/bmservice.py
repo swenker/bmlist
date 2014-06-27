@@ -108,7 +108,7 @@ class BookService(object):
                        FROM "+TABLE_BOOK
 
         if query_in_title:
-            sqlwhere=" WHERE title LIKE '%"+query_in_title+"%' "
+            sqlwhere=" WHERE title LIKE '%"+query_in_title+"%' OR author LIKE '%"+query_in_title+"%'"
             sqls+=sqlwhere
             sqlc +=sqlwhere
 

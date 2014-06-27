@@ -1,6 +1,6 @@
-$def with(booklist,total,total_pages)
+$def with(booklist,total,total_pages,logged)
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,7 +13,7 @@ $def with(booklist,total,total_pages)
     $if(booklist):
        total:$total,$total_pages <br/>
            <form action="/bm/book/list" method="GET">
-            ISBN:<input type="text" size="20" name="kw"/>
+            title:<input type="text" size="20" name="kw"/>
             <input type="submit" value="query"/>
             </form>
 
@@ -35,7 +35,11 @@ $def with(booklist,total,total_pages)
                     <td nowrap="nowrap">$book.pubdate</td>
                     <!--<td>$book.price</td>-->
                     <td>$book.status</td>
-                    <td><a href="/bm/book/edit?bid=$book.id">Edit</a>&nbsp;|&nbsp;<a href="/bm/book/delete?bid=$book.id">Delete</a></td>
+                    <td>
+                    $if logged:
+                             <a href="/bm/book/edit?bid=$book.id">Edit</a>&nbsp;|&nbsp;<a href="/bm/book/delete?bid=$book.id">Delete</a>
+                        &nbsp;
+                    </td>
                 </tr>
         </table>
         $for i in range(total_pages):

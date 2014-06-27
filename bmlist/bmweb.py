@@ -15,11 +15,12 @@ URL_LIST='/bm/book/list'
 URL_DELETE='/bm/book/delete'
 URL_IMPORT='/bm/book/imp'
 URL_EXPORT='/bm/book/exp'
+URL_SIGNIN='/bm/u/signin'
+URL_SIGNOUT='/bm/u/sout'
 
 urls=(
     '/bm','Home',
     '/bm/s','DisplayService',
-    '/bm/user/signin','UserSignin',
     URL_CHECK,'CheckBook',  #mainly used to record book into database
     URL_LIST,'ListBooks',
     URL_GET, 'GetBook',
@@ -28,9 +29,11 @@ urls=(
     URL_DELETE,'DeleteBook',
     URL_IMPORT,'ImportBook',
     URL_EXPORT,'ExportBook',
-    '/bm/book/add','AddBook'
+    '/bm/book/add','AddBook',
+    URL_SIGNIN,'UserSignin',
+    URL_SIGNOUT,'UserSignout'
 )
-
+web.config.debug = False
 app=web.application(urls,globals())
 application = app.wsgifunc()
 
@@ -51,30 +54,37 @@ class DisplayService():
 def updatesession(user):
     session.bmuser=user
 
-def checksession(user):
-    if not session.bmuser :
-        session.bmuser=user
-    else:
-        return session.bmuser
-
+def checksession():
+    return session.bmuser
 
 class UserSignin():
     def GET(self):
-        params = web.input(signin=None)
-
-        if params.signin and params.signin=='SignIn' :
+        if not checksession():
             return render.signin()
         else:
-            email = params.email
-            passwd= params.passwd
+            return render.index()
 
-            account_service=AccountService()
-            bmuser=account_service.signin(email,passwd)
+    def POST(self):
+        params = web.input()
+        email = params.email
+        passwd= params.passwd
 
-            if bmuser:
-                updatesession(bmuser)
+        account_service=AccountService()
+        bmuser=account_service.signin(email,passwd)
+        if bmuser:
+            updatesession(bmuser)
+            return render.index()
+        else:
+            updatesession(None)
+            return render.error("Failded to login in")
 
-            return "OK"
+class UserSignout():
+    def GET(self):
+        if checksession():
+            session.kill()
+
+        return render.index()
+
 
 _EVERY_PAGE=20
 class ListBooks():
@@ -102,7 +112,11 @@ class ListBooks():
 
         total_pages=(total+_EVERY_PAGE-1)/_EVERY_PAGE
 
-        return render.booklist(blist,total,total_pages)
+        logged=False
+        if checksession():
+            logged=True
+
+        return render.booklist(blist,total,total_pages,logged)
 
 class CheckBook():
     def GET(self):
@@ -203,7 +217,6 @@ class ServiceHelper():
         bid=int(params.bid)
         book=None
         if bid:
-            print "OK?..............."
             book = bookservice.get_book_byid(bid)
         else:
             book=Book()
