@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 #coding=utf-8
-
+import json
 from decimal import *
+
 class User(object):
     def __init__(self):
         self.id=0
@@ -13,6 +14,9 @@ class User(object):
 
     def __str__(self):
         return "id:%d,email:%s,status:%d" %(self.id,self.email,self.status)
+
+    def jsonable(self):
+        return self.__dict__
 
 class Book(object):
     def __init__(self):
@@ -59,4 +63,13 @@ class Book(object):
            #self.publisher,self.pubdate,self.price,self.pages,self.update_time,self.create_time,self.quantity,self.series,self.keywords,self.summary,self.authorintro)
 
         
-        
+    def jsonable(self):
+        return self.__dict__
+
+class ComplexEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if hasattr(obj, 'jsonable'):
+            return obj.jsonable()
+        else:
+            raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
+

@@ -1,11 +1,14 @@
 __author__ = 'samsung'
 
 from decimal import *
+import json
 import web
 
 from entities import *
 from bmservice import AccountService
 from bmservice import BookService
+
+
 
 URL_CREATE='/bm/book/create'
 URL_EDIT='/bm/book/edit'
@@ -131,6 +134,7 @@ class CheckBook():
                 book=Book()
             return render.bookedit(book,URL_CREATE)
 
+
 class GetBook():
     def GET(self):
         params = web.input()
@@ -138,16 +142,10 @@ class GetBook():
 
         book = bookservice.get_book_byid(bid)
 
-        return render.bookview(book)
+        return json.dumps(book,cls=ComplexEncoder)
+
 
 class EditBook():
-    def GET(self):
-        """just show the edit form"""
-        params = web.input()
-        bid = params.bid
-        book = bookservice.get_book_byid(bid)
-        return render.bookedit(book,URL_EDIT)
-
     def POST(self):
         """To save book """
         params=web.input()

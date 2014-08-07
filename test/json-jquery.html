@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!--<script src="http://code.jquery.com/jquery-2.1.1.js"></script>-->
+    <script src="js/jquery-2.1.1.js"></script>
+    <title></title>
+</head>
+<body>
+<script>
+    var person='{"name": "Mike", "address": {"street": "Taiyanggong"}}';
+    pp=$.parseJSON(person);
+
+    //alert(pp.address.street);
+
+
+    var pslist='[{"name": "Mike", "address": {"houses": [], "street": "Taiyanggong"}}, {"name": "Tom", "address": {"houses": [], "street": "Hepingjie"}}]';
+
+    plist=$.parseJSON(pslist);
+
+    alert(plist[0].name);
+    alert(plist[1].name);
+
+</script>
+
+</body>
+</html>
