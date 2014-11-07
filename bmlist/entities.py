@@ -2,6 +2,7 @@
 #coding=utf-8
 import json
 from decimal import *
+from datetime import datetime
 
 class User(object):
     def __init__(self):
@@ -70,6 +71,10 @@ class ComplexEncoder(json.JSONEncoder):
     def default(self, obj):
         if hasattr(obj, 'jsonable'):
             return obj.jsonable()
+        elif isinstance(obj,datetime):
+            return obj.strftime("%Y-%m-%d %H:%M:%S")
+        elif isinstance(obj,Decimal):
+            return str(obj)
         else:
             raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
 

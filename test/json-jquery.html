@@ -8,29 +8,53 @@
 </head>
 <body>
 <script>
+function tryusage(){
+
     var person='{"name": "Mike", "address": {"street": "Taiyanggong"}}';
     pp=$.parseJSON(person);
 
     //alert(pp.address.street);
-
 
     var pslist='[{"name": "Mike", "address": {"houses": [], "street": "Taiyanggong"}}, {"name": "Tom", "address": {"houses": [], "street": "Hepingjie"}}]';
 
     plist=$.parseJSON(pslist);
 
 //    alert(plist[0].name);
- //   alert(plist[1].name);
 
 
-
+}
 
 </script>
 
 <script>
-    bookobj=$.parseJSON($.ajax({url:""}));
 
+    var listurl="http://localhost:8080/bm/book/list"
+    var books=[]
+    $.getJSON(listurl,{ppp:'abc'})
+       .done(
+          function(data){
+              $.each( data, function( key, item ) {
+                //alert(item);
+                if(key=='booklist'){
+                   alert(item[0].publisher);
+                }
+
+              });
+               alert("ok...");
+
+          }
+       )
+       .fail(function( jqxhr, textStatus, error ) {
+          var err = textStatus + ", " + error;
+          console.log( "Request Failed: " + err );
+       });
 </script>
 
 
+<div>
+    <table id="booktbl">
+
+    </table>
+</div>
 </body>
 </html>

@@ -119,20 +119,29 @@ class ListBooks():
         if checksession():
             logged=True
 
-        return render.booklist(blist,total,total_pages,logged)
+        #return "1234"+to_jsonstr(BookListWrapper([bk.__dict__ for bk in blist],total,total_pages))
+        web.header("Access-Control-Allow-Origin", "*")
+        return to_jsonstr(BookListWrapper([bk.__dict__ for bk in blist],total,total_pages))
 
 class CheckBook():
     def GET(self):
         params = web.input()
         isbn = params.isbn.strip()
         book=bookservice.get_book_byisbn(isbn)
-        if book :
-            return render.bookview(book)
-        else:
+        # if book :
+        #     return render.bookview(book)
+        # else:
+        #     book = bookservice.get_book_byisbn_fromremote(isbn)
+        #     if not book :
+        #         book=Book()
+        #     return render.bookedit(book,URL_CREATE)
+
+        if not book :
             book = bookservice.get_book_byisbn_fromremote(isbn)
-            if not book :
-                book=Book()
-            return render.bookedit(book,URL_CREATE)
+
+            if not book:
+                book = Book()
+        to_jsonstr(object)
 
 
 class GetBook():
@@ -142,7 +151,7 @@ class GetBook():
 
         book = bookservice.get_book_byid(bid)
 
-        return json.dumps(book,cls=ComplexEncoder)
+        return to_jsonstr(book)
 
 
 class EditBook():
@@ -239,6 +248,19 @@ class ServiceHelper():
             bookservice.create_book(book)
 
         return book
+
+class BookListWrapper:
+    def __init__(self,blist,total_count,total_pages):
+        self.booklist=blist
+        self.total = total_count
+        self.total_pages=total_pages
+
+    def jsonable(self):
+        return self.__dict__
+
+
+def to_jsonstr(obj):
+    return json.dumps(obj.__dict__,cls=ComplexEncoder)
 
 #It can not be run on Windows
 if __name__=="__main__":
