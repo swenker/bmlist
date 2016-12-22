@@ -1,0 +1,18 @@
+.field{
+    padding:5px;
+}
+
+.red_note{
+    color:#FF0000;
+}
+
+a:link,
+a:visited {
+    color:#0000FF;
+    text-decoration:none;
+}
+a:hover,
+a:active {
+    color:#FF0088;
+    text-decoration:none;
+}
