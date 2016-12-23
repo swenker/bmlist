@@ -45,8 +45,8 @@ class Book(models.Model):
     binding = models.CharField(max_length=10, null=True, blank=True)
     series = models.CharField(max_length=40, null=True, blank=True)
     keywords = models.CharField(max_length=40, null=True, blank=True)
-    summary = models.CharField(max_length=200, null=True, blank=True)
-    authorintro = models.CharField(max_length=200, null=True, blank=True)
+    summary = models.CharField(max_length=500, null=True, blank=True)
+    authorintro = models.CharField(max_length=500, null=True, blank=True)
     status = models.SmallIntegerField(default=1)
 
     # def __init__(self): #this will leads to instance initialization error

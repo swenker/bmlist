@@ -26,6 +26,7 @@ class BmConfig():
     def  getlogger(self,loggername="BmlistService"):
         return logging.getLogger(loggername)
 
-bmconfig = BmConfig("conf")
+# bmconfig = BmConfig("conf")
+bmconfig = BmConfig("conf/local")
 logger=bmconfig.getlogger()
 bmconfig.getlogger().info("Service Config loaded successfully..")

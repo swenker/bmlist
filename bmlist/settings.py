@@ -82,10 +82,10 @@ DATABASES = {
     # },
     'default':   {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mytest',
-        'USER': 'root',
-        'PASSWORD': 'nopass',
-        'HOST': '127.0.0.1',
+        'NAME': 'bmlist',
+        'USER': 'bmlist',
+        'PASSWORD': 'bmlist_u01',
+        'HOST': 'centos.blurdev.com',
         'PORT': '3306',
     },
 }

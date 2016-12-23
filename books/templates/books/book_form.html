@@ -15,7 +15,8 @@
               url: "/books/api/detail/{{ book_id }}",
               success: function( result ) {
                 book=result;
-                $( "#id_book_id" ).val(book.id );
+                $( "#id_book_id_view" ).html("<strong>" + book.id + "</strong>"  );
+                $( "#id_book_id" ).val(book.id);
                 $( "#id_book_title" ).val(book.title );
                 $( "#id_book_subtitle" ).val(book.subtitle );
                 $( "#id_book_author" ).val(book.author );
@@ -49,7 +50,7 @@
          {% csrf_token %}
 
         <div class="field" id="div_book_id">
-            <label for="id_book_id_view">BOOK_ID：</label><input name="title" id="id_book_id_view" size="20" maxlength="30">&nbsp;&nbsp;
+            <label for="id_book_id_view">BOOK_ID：</label><span id="id_book_id_view"></span>&nbsp;&nbsp;
         </div>
         <div class="field">
             <label for="id_book_title">书名：</label><input name="title" id="id_book_title" size="20" maxlength="50">&nbsp;&nbsp;
