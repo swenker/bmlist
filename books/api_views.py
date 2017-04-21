@@ -65,12 +65,12 @@ def get_book_by_isbn_for_add(request,isbn):
 
 def get_GET_param(request, param_name, default_value=None):
     val = request.POST.get(param_name,default_value)
-    print "%s:%s" %(param_name,val)
+    print("%s:%s" %(param_name,val))
     return request.GET.get(param_name,default_value)
 
 def get_POST_param(request, param_name, default_value=None):
     val = request.POST.get(param_name,default_value)
-    print "%s:%s" %(param_name,val)
+    print ("%s:%s" %(param_name,val))
     if val:
         val = val.strip()
     return val
