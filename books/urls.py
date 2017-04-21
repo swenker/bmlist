@@ -25,7 +25,7 @@ urlpatterns = [
     #API goes here
     url(r'^api/search', api_views.search_book, name='api_book_list'),
     url(r'^api/detail/(?P<book_id>[0-9]+)$', api_views.get_book_detail, name='api_book_detail'),
-    url(r'^api/rm/',api_views.delete_book, name='api_delete_book'),
+    url(r'^api/rm/(?P<book_id>[0-9]+)$',api_views.delete_book, name='api_delete_book'),
     url(r'^api/create$',api_views.create_book, name='api_create_book'),
     url(r'^api/update$',api_views.update_book, name='api_update_book'),
     url(r'^api/add/',api_views.add_book_to_user_shelf,name='api_add_book'),

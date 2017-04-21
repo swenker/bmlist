@@ -43,7 +43,7 @@
                     div_book.append($("<div class='field'>出版社：<strong>" + book.publisher + "</strong></div>"));
                     div_book.append($("<div class='field'>出版时间：<strong>" + book.pubdate + "</strong></div>"));
                     div_book.append($("<div class='field'>定&nbsp;&nbsp;&nbsp;&nbsp;价：<strong>" + book.price + "</strong></div>"));
-                    div_book.append($("<div class='field'><span>[<a href='/books/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/books/detail/"+book.id+"'>Delete</a>]</span></div>"));
+                    div_book.append($("<div class='field'><span>[<a href='/books/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/books/api/rm/"+book.id+"'>Delete</a>]</span></div>"));
                     div_book_list.append(div_book);
                 });
               },
