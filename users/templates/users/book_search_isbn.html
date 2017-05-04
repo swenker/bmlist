@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Search by ISBN</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'  %}"/>
+    <script type = "text/javascript" src="{% static 'jquery/jquery-1.11.3.min.js'  %}"></script>
+    <script type = "text/javascript" >
+        function initForm(){
+            $('#btn_search').click(fetch_book);
+            {% if isbn %}
+            isbn = $("#isbn").val({{isbn}});
+            {% endif %}
+        }
+        function fetch_book(){
+            $("#book_note").html("");
+            $("#result").hide();
+            isbn = $("#isbn").val();
+            $.ajax({
+              url: "/books/api/risbn/"+isbn,
+              success: function( result ) {
+                book=result;
+                //console.log(book);
+                console.log(book.transtr);
+                //$( "#id_book_id" ).val(book.id );
+                $( "#id_book_title" ).val(book.title );
+                $( "#id_book_subtitle" ).val(book.subtitle );
+                $( "#id_book_author" ).val(book.author );
+                $( "#id_book_translator" ).val(book.transtr );
+                $( "#id_book_isbn10" ).val(book.isbn10 );
+                $( "#id_book_isbn13" ).val(book.isbn13 );
+                $( "#id_book_publisher" ).val(book.publisher );
+                $( "#id_book_pubdate" ).val(book.pubdate );
+                $( "#id_book_price" ).val(book.price );
+                $( "#id_book_pages" ).val(book.pages );
+                $( "#id_book_quantity" ).val(book.quantity );
+                $( "#id_book_binding" ).val(book.binding );
+
+                if(book.id && book.id!=''){
+                    $("#book_form").attr('action','/books/api/update');
+                    $("#id_book_id").val(book.id);
+                    $("#book_note").html("It's in the shelf with BOOK_ID：<strong>" + book.id + "</strong>");
+                }
+                else{
+                    $("#book_form").attr('action','/books/api/create');
+                }
+
+                $("#result").show();
+              },
+              error: function(msg){
+                console.log(msg);
+                $("#book_note").html("Not found isbn：<strong>" + isbn + "</strong>");
+              }
+
+            });
+        }
+
+        $(document).ready(initForm);
+
+    </script>
+
+</head>
+<body>
+<div >
+    <div id="search_form">
+        <!--<form method="post">-->
+          <label for="isbn"> ISBN:</label><input id="isbn" type="text" placeholder="isbn" maxlength="13" size="20">
+          <input id="btn_search" type="button" value="GO!">
+        <!--</form>-->
+    </div>
+    <div id="book_note" class="field red_note"></div>
+    <div id="result" style="display:none">
+        <div style="padding:5px"></div>
+            <form id="book_form" method="post">
+                <input type="hidden" id="id_book_id" name="book_id">
+             {% csrf_token %}
+            <div class="field">
+                <label for="id_book_title">书名：</label><input name="title" id="id_book_title" size="20" maxlength="50">&nbsp;&nbsp;
+            </div>
+            <div class="field">
+                <label for="id_book_subtitle">副标题：</label><input name="subtitle" id="id_book_subtitle" size="20" maxlength="50">
+            </div>
+            <div class="field">
+                <label for="id_book_author">作者： </label><input name="author" id="id_book_author" size="20" maxlength="70">&nbsp;&nbsp;
+            </div>
+            <div class="field">
+                <label for="id_book_translator">译者： </label><input name="transtr" id="id_book_translator" size="20" maxlength="70">
+            </div>
+            <div class="field">
+                <label for="id_book_isbn10">ISBN10： </label><input name="isbn10" id="id_book_isbn10" size="13" maxlength="10">&nbsp;&nbsp;
+            </div>
+            <div class="field">
+                <label for="id_book_isbn13">ISBN13： </label><input name="isbn13" id="id_book_isbn13" size="13" maxlength="13">
+            </div>
+
+            <div class="field">
+                <label for="id_book_publisher">出版社：</label><input name="publisher" id="id_book_publisher" size="20" maxlength="50">&nbsp;&nbsp;
+            </div>
+            <div class="field">
+                <label for="id_book_pubdate">出版时间：</label><input name="pubdate" id="id_book_pubdate" size="10" maxlength="10">
+            </div>
+            <div class="field">
+                <label for="id_book_price">定价：</label><input name="price" id="id_book_price" size="10" maxlength="7">&nbsp;&nbsp;
+            </div>
+            <div class="field">
+                <label for="id_book_binding">包装：</label><input name="binding" id="id_book_binding" size="10" maxlength="10">
+            </div>
+            <div class="field">
+                <label for="id_book_pages">页数：</label><input name="pages" id="id_book_pages" size="10" maxlength="4">&nbsp;&nbsp;
+            </div>
+            <div class="field">
+                <label for="id_book_quantity">册数：</label><input name="quantity" id="id_book_quantity" size="10" maxlength="4">&nbsp;&nbsp;
+
+            </div>
+
+            <div style="padding:10px"><button type="submit">保存</button><button type="reset">取消</button></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

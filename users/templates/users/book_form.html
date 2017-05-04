@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Detail</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'  %}"/>
+    <script type = "text/javascript" src="{% static 'jquery/jquery-1.11.3.min.js'  %}"></script>
+    <script type = "text/javascript" >
+    {%if book_id%}
+        function fetch_book(){
+            $.ajax({
+              url: "/books/api/detail/{{ book_id }}",
+              success: function( result ) {
+                book=result;
+                $( "#id_book_id_view" ).html("<strong>" + book.id + "</strong>"  );
+                $( "#id_book_id" ).val(book.id);
+                $( "#id_book_title" ).val(book.title );
+                $( "#id_book_subtitle" ).val(book.subtitle );
+                $( "#id_book_author" ).val(book.author );
+                $( "#id_book_translator" ).val(book.transtr );
+                $( "#id_book_isbn10" ).val(book.isbn10 );
+                $( "#id_book_isbn13" ).val(book.isbn13 );
+                $( "#id_book_publisher" ).val(book.publisher );
+                $( "#id_book_pubdate" ).val(book.pubdate );
+                $( "#id_book_price" ).val(book.price );
+                $( "#id_book_pages" ).val(book.pages );
+                $( "#id_book_quantity" ).val(book.quantity );
+                $( "#id_book_binding" ).val(book.binding );
+              },
+              error: function(msg){
+                console.log(msg);
+              }
+
+            });
+        }
+
+       $(document).ready(fetch_book);
+    {%endif%}
+    </script>
+</head>
+<body>
+<div style="padding:5px">
+    {% if book_id %}
+        <form action="/books/api/update" method="post">
+            <input type="hidden" id="id_book_id" name="book_id">
+    {% else %}<form action="/books/api/create" method="post">{% endif%}
+         {% csrf_token %}
+
+        <div class="field" id="div_book_id">
+            <label for="id_book_id_view">BOOK_ID：</label><span id="id_book_id_view"></span>&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_book_title">书名：</label><input name="title" id="id_book_title" size="20" maxlength="50">&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_book_subtitle">副标题：</label><input name="subtitle" id="id_book_subtitle" size="20" maxlength="50">
+        </div>
+        <div class="field">
+            <label for="id_book_author">作者： </label><input name="author" id="id_book_author" size="20" maxlength="70">&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_book_translator">译者： </label><input name="transtr" id="id_book_translator" size="20" maxlength="70">
+        </div>
+        <div class="field">
+            <label for="id_book_isbn10">ISBN10： </label><input name="isbn10" id="id_book_isbn10" size="13" maxlength="10">&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_book_isbn13">ISBN13： </label><input name="isbn13" id="id_book_isbn13" size="13" maxlength="13">
+        </div>
+
+        <div class="field">
+            <label for="id_book_publisher">出版社：</label><input name="publisher" id="id_book_publisher" size="20" maxlength="50">&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_book_pubdate">出版时间：</label><input name="pubdate" id="id_book_pubdate" size="10" maxlength="10">
+        </div>
+        <div class="field">
+            <label for="id_book_price">定价：</label><input name="price" id="id_book_price" size="10" maxlength="7">&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_book_binding">包装：</label><input name="binding" id="id_book_binding" size="10" maxlength="10">
+        </div>
+        <div class="field">
+            <label for="id_book_pages">页数：</label><input name="pages" id="id_book_pages" size="10" maxlength="4">&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_book_quantity">册数：</label><input name="quantity" id="id_book_quantity" size="10" maxlength="4">&nbsp;&nbsp;
+
+        </div>
+
+        <div style="padding:10px"><button type="submit">保存</button></div>
+    </form>
+</div>
+</body>
+</html>

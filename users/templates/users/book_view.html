@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Book Detail</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'  %}"/>
+    <script type = "text/javascript" src="{% static 'jquery/jquery-1.11.3.min.js'  %}"></script>
+    <script type = "text/javascript" >
+
+        function fetch_book(){
+            $.ajax({
+              {% if book_id %}url: "/books/api/detail/{{ book_id }}",{% endif %}
+              {% if isbn %}url: "/books/api/isbn/{{ isbn }}",{% endif %}
+              success: function( result ) {
+                book=result;
+                //console.log(book);
+                $( "#id_book_title" ).html( "<strong>" + book.title + "</strong>" );
+                $( "#id_book_subtitle" ).html( "<strong>" + book.subtitle + "</strong>" );
+                $( "#id_book_author" ).html( "<strong>" + book.author + "</strong>" );
+                $( "#id_book_transtr" ).html( "<strong>" + book.transtr + "</strong>" );
+                $( "#id_book_isbn10" ).html( "<strong>" + book.isbn10 + "</strong>" );
+                $( "#id_book_isbn13" ).html( "<strong>" + book.isbn13 + "</strong>" );
+                $( "#id_book_publisher" ).html( "<strong>" + book.publisher + "</strong>" );
+                $( "#id_book_pubdate" ).html( "<strong>" + book.pubdate + "</strong>" );
+                $( "#id_book_price" ).html( "<strong>" + book.price + "</strong>" );
+                $( "#id_book_quantity" ).html( "<strong>" + book.quantity + "</strong>" );
+                $( "#id_book_pages" ).html( "<strong>" + book.pages + "</strong>" );
+                $( "#id_book_binding" ).html( "<strong>" + book.binding + "</strong>" );
+
+                $("#id_book_action").html("<span>[<a href='/books/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/books/api/rm/"+book.id+"'>Delete</a>]</span>");
+
+              },
+              error: function(msg){
+                console.log(msg);
+              }
+
+            });
+        }
+
+       $(document).ready(fetch_book);
+
+    </script>
+
+</head>
+<body>
+<div>书名：<span id="id_book_title"></span>&nbsp;&nbsp;</div>
+<div>副标题： <span id="id_book_subtitle"></span>  </div>
+<div>作者：<span id="id_book_author"></span>&nbsp;&nbsp;</div>
+<div>译者： <span id="id_book_transtr"></span>  </div>
+<div>ISBN10： <span id="id_book_isbn10"></span>&nbsp;&nbsp;</div>
+<div>ISBN13： <span id="id_book_isbn13"></span>  </div>
+<div>出版社：<span id="id_book_publisher"></span>&nbsp;&nbsp;</div>
+<div>出版时间：<span id="id_book_pubdate"></span> </div>
+<div>定价：<span id="id_book_price"></span>&nbsp;&nbsp;</div>
+<div>包装：<span id="id_book_binding"></span>     </div>
+<div>页数：<span id="id_book_pages"></span>&nbsp;&nbsp;</div>
+<div>册数：<span id="id_book_quantity"></span>     </div>
+<div id="id_book_action">
+
+</div>
+</body>
+</html>

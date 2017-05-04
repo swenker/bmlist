@@ -120,21 +120,32 @@ class BookService():
 
 
 class UserAccountService():
-    def signin(self,email,passwd):
-        email = email.lower()
-        passwd=tomd5(passwd)
-        user = User.objects.get(email=email.lower())
-        if user:
-            #TODO compare char by char?
-            if user.passwd == passwd:
-                return user
+    def __is_email(input_email):
+        if input_email.count('@') == 1:
+            return True
+        return False
+
+    def signin(self,email,passwd,nickname=None):
+        if self.__is_email(email):
+            email = email.lower()
+            passwd=tomd5(passwd)
+            user = User.objects.get(email=email.lower())
+            if user:
+                #TODO compare char by char?
+                if user.passwd == passwd:
+                    return user
+        else:
+            user = User.objects.get(nickname = nickname)
+            if user:
+                if user.passwd == passwd:
+                    return user
 
         return None
 
     def signup(self,user):
         """new user"""
         passwd=tomd5(user.passwd)
-        if not self.exists(user.email):
+        if not self.__exists(user.email,user.nickname):
             user.passwd = passwd
             user.save()
         else:
@@ -142,13 +153,18 @@ class UserAccountService():
             logger.info(msg)
             raise BaseException(msg)
 
-    def exists(self,email):
+    def __exists(self,email,nickname):
         email = email.lower()
 
         try:
             user = User.objects.get(email = email)
             if user:
                 return True
+
+            user = User.objects.get(nickname = nickname)
+            if user:
+                return True
+
         except User.DoesNotExist,dne:
             return False
 
