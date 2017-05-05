@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 
 from serviceconfig import logger
 from books.models import Book
-from books.models import User
+from users.models import Account
 from bookparser import BookParser
 from bmutils import *
 
@@ -120,36 +120,37 @@ class BookService():
 
 
 class UserAccountService():
-    def __is_email(input_email):
+    def __is_email(self,input_email):
         if input_email.count('@') == 1:
             return True
         return False
 
-    def signin(self,email,passwd,nickname=None):
-        if self.__is_email(email):
-            email = email.lower()
+    def signin(self,passwd,login_id):
+        if self.__is_email(login_id):
+            email = login_id.lower()
             passwd=tomd5(passwd)
-            user = User.objects.get(email=email.lower())
+            user = Account.objects.get(email=email.lower())
             if user:
                 #TODO compare char by char?
                 if user.passwd == passwd:
                     return user
         else:
-            user = User.objects.get(nickname = nickname)
+            nickname = login_id
+            user = Account.objects.get(nickname = nickname)
             if user:
                 if user.passwd == passwd:
                     return user
 
         return None
 
-    def signup(self,user):
+    def signup(self,account):
         """new user"""
-        passwd=tomd5(user.passwd)
-        if not self.__exists(user.email,user.nickname):
-            user.passwd = passwd
-            user.save()
+        passwd=tomd5(account.passwd)
+        if not self.__exists(account.email,account.nickname):
+            account.passwd = passwd
+            account.save()
         else:
-            msg="email:%s already exist."%(user.email)
+            msg="email:%s already exist."%(account.email)
             logger.info(msg)
             raise BaseException(msg)
 
@@ -157,23 +158,52 @@ class UserAccountService():
         email = email.lower()
 
         try:
-            user = User.objects.get(email = email)
-            if user:
+            account = Account.objects.get(email = email)
+            if account:
                 return True
 
-            user = User.objects.get(nickname = nickname)
-            if user:
+                account = Account.objects.get(nickname = nickname)
+            if account:
                 return True
 
-        except User.DoesNotExist,dne:
+        except Account.DoesNotExist,dne:
             return False
 
-    def delete(self,user_id):
-        user = User.objects.get(id=user_id)
-        user.delete()
+    def delete_account(self,account_id):
+        account = Account.objects.get(id=account_id)
+        account.delete()
 
-    def changePasswd(self,uid,oldpwd,newpwd):
+    def search_accounts(self, keyword, npage=1):
+        "If no keyword is passed in , the result is top new users recently signup."
+        account_list=None
+        total_count=0
+        total_pages=0
+        N_EVERY_PAGE=2
+
+        if keyword:
+            if __.match(keyword):
+                book_list = Account.objects.filter(email = keyword)
+            elif isbn10_pattern.match(keyword):
+                book_list = Book.objects.filter(isbn10 = keyword)
+            else:
+                book_list = Book.objects.filter(Q(title__icontains = keyword)
+                                                | Q(publisher__icontains = keyword)
+                                                | Q(author__icontains = keyword)
+                                               )
+        else:
+            account_list = Account.objects.all().order_by('-create_time')
+        if account_list:
+            total_count = len(account_list)
+            total_pages = (total_count+N_EVERY_PAGE-1)/N_EVERY_PAGE
+
+            paginator = Paginator(account_list,N_EVERY_PAGE)
+            account_list = paginator.page(npage)
+
+        return total_count,total_pages,account_list
+
+    def change_passwd(self,uid,oldpwd,newpwd):
         raise BaseException("Not Implemented")
 
 
 book_service = BookService()
+user_service = UserAccountService()

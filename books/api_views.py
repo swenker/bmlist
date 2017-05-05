@@ -6,7 +6,6 @@ from django.http import Http404
 
 from  bmlist_service import book_service
 from books.models import Book
-from books.models import User
 
 
 # Create your views here.
@@ -119,21 +118,6 @@ def update_book(request):
     fill_in_book(request,book)
     book_service.update_book(book)
     return HttpResponse("{'status':'OK'}")
-
-def add_book_to_user_shelf(request,book_id):
-    pass
-
-
-def __fill_in_user(request,user):
-    user.email = get_POST_param(request, 'email')
-    user.passwd = get_POST_param(request, 'passwd')
-    user.nickname = get_POST_param(request, 'nickname')
-
-def signup_user(request):
-    user = User()
-    __fill_in_user(request,user)
-
-
 
 class BookListWrapper:
     "For json serialization"
