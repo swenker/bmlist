@@ -6,7 +6,8 @@ from django.http import Http404
 
 from  bmlist_service import book_service
 from books.models import Book
-
+from bmutils import PaginationListWrapper
+from bmutils import get_POST_param,get_GET_param
 
 # Create your views here.
 CONTENT_TYPE="application/json;charset=UTF-8"
@@ -20,7 +21,7 @@ def search_book(request):
     total_count,total_pages,book_list = book_service.search_books(keyword,npage)
     # return HttpResponse(book.jsonable(),content_type="application/json")
 
-    return JsonResponse( BookListWrapper(book_list, total_count, total_pages, npage).jsonable(),content_type=CONTENT_TYPE)
+    return JsonResponse( PaginationListWrapper(book_list, total_count, total_pages, npage).jsonable(),content_type=CONTENT_TYPE)
 
 def get_book_detail(request,book_id):
     "The parameter is still in string format instead of int"
@@ -62,18 +63,6 @@ def get_book_by_isbn_for_add(request,isbn):
              return JsonResponse(book.jsonable(),content_type=CONTENT_TYPE)
         else:
             raise Http404("Book with isbn %s Not Found" % isbn)
-
-def get_GET_param(request, param_name, default_value=None):
-    val = request.POST.get(param_name,default_value)
-    print("%s:%s" %(param_name,val))
-    return request.GET.get(param_name,default_value)
-
-def get_POST_param(request, param_name, default_value=None):
-    val = request.POST.get(param_name,default_value)
-    print ("%s:%s" %(param_name,val))
-    if val:
-        val = val.strip()
-    return val
 
 def fill_in_book(request,book):
     book.title=get_POST_param(request,'title')
@@ -119,14 +108,14 @@ def update_book(request):
     book_service.update_book(book)
     return HttpResponse("{'status':'OK'}")
 
-class BookListWrapper:
-    "For json serialization"
-    def __init__(self,blist,total_count=0,total_pages=0,npage=0):
-        "The item in blist should have a method named jsonable"
-        self.itemlist =[ sitem.jsonable() for sitem in blist ]
-        self.total = total_count
-        self.total_pages = total_pages
-        self.npage = npage
-
-    def jsonable(self):
-        return self.__dict__
+# class BookListWrapper:
+#     "For json serialization"
+#     def __init__(self,blist,total_count=0,total_pages=0,npage=0):
+#         "The item in blist should have a method named jsonable"
+#         self.itemlist =[ sitem.jsonable() for sitem in blist ]
+#         self.total = total_count
+#         self.total_pages = total_pages
+#         self.npage = npage
+#
+#     def jsonable(self):
+#         return self.__dict__

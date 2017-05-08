@@ -21,7 +21,7 @@ def get_account_by_id(request, account_id):
 
 
 def signup(request):
-    return render(request, 'userss/signup_form.html')
+    return render(request, 'users/signup_form.html')
 
 
 def signin(request):

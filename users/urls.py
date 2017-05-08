@@ -20,8 +20,8 @@ urlpatterns = [
 
     #API goes here
     url(r'^api/search', api_views.search_account, name='api_book_list'),
-    url(r'^api/detail/(?P<book_id>[0-9]+)$', api_views.get_book_detail, name='api_book_detail'),
-    url(r'^api/rm/(?P<book_id>[0-9]+)$',api_views.delete_book, name='api_delete_book'),
-    url(r'^api/signup',api_views.signup, name='api_create_book'),
-    url(r'^api/update$',api_views.update_book, name='api_update_book'),
+    url(r'^api/detail/(?P<account_id>[0-9]+)$', api_views.get_account_by_id, name='api_account_detail'),
+    url(r'^api/rm/(?P<book_id>[0-9]+)$',api_views.delete_account, name='api_delete_account'),
+    url(r'^api/signup',api_views.signup, name='api_signup'),
+    url(r'^api/signin',api_views.signin, name='api_signin'),
 ]

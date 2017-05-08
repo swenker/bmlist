@@ -149,6 +149,7 @@ class UserAccountService():
         if not self.__exists(account.email,account.nickname):
             account.passwd = passwd
             account.save()
+            return account.id
         else:
             msg="email:%s already exist."%(account.email)
             logger.info(msg)

@@ -11,6 +11,20 @@ def normalize_str(str):
 def get_now():
     return datetime.now()
 
+def get_GET_param(request, param_name, default_value=None):
+    val = request.GET.get(param_name,default_value)
+    # print("%s:%s" %(param_name,val))
+    if val:
+        val = val.strip()
+    return val
+
+def get_POST_param(request, param_name, default_value=None):
+    val = request.POST.get(param_name, default_value)
+    print ("%s:%s" % (param_name, val))
+    if val:
+        val = val.strip()
+    return val
+
 
 class PaginationListWrapper:
     "For json serialization"

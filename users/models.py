@@ -11,7 +11,7 @@ from bmutils import *
 class Account(models.Model):
     # id=0
     email=models.CharField(max_length=60,null=True,blank=True)
-    passwd=models.CharField(max_length=20)
+    passwd=models.CharField(max_length=64)
     nickname=models.CharField(max_length=20,null=True,blank=True)
     # cellphone=models.CharField(max_length=20,null=True,blank=True)
     dtcreate=models.DateTimeField(auto_now_add=True)
@@ -33,7 +33,7 @@ class Account(models.Model):
 
 
 #TODO
-class UserProfile(models.Model):
+class UserProfile():
     # id=0
     brief = models.CharField(max_length=100, null=True, blank=True)
     #TODO foreign key?

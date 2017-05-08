@@ -5,6 +5,7 @@ from django.http import Http404
 from bmlist_service import user_service
 from users.models import *
 from bmutils import PaginationListWrapper
+from bmutils import get_POST_param
 
 # Create your views here.
 CONTENT_TYPE = "application/json;charset=UTF-8"
@@ -43,20 +44,6 @@ def delete_account(request, account_id):
         raise Http404("User with id %s Not Found" % account_id)
 
     return HttpResponse("{'status':'OK'}")
-
-
-def get_GET_param(request, param_name, default_value=None):
-    val = request.POST.get(param_name, default_value)
-    print("%s:%s" % (param_name, val))
-    return request.GET.get(param_name, default_value)
-
-
-def get_POST_param(request, param_name, default_value=None):
-    val = request.POST.get(param_name, default_value)
-    print ("%s:%s" % (param_name, val))
-    if val:
-        val = val.strip()
-    return val
 
 
 def __fill_in_account(request, account):

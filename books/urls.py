@@ -28,7 +28,6 @@ urlpatterns = [
     url(r'^api/rm/(?P<book_id>[0-9]+)$',api_views.delete_book, name='api_delete_book'),
     url(r'^api/create$',api_views.create_book, name='api_create_book'),
     url(r'^api/update$',api_views.update_book, name='api_update_book'),
-    url(r'^api/add/',api_views.add_book_to_user_shelf,name='api_add_book'),
     url(r'^api/isbn/(?P<isbn>[0-9]{10,13})$',api_views.get_book_by_isbn,name='api_get_by_isbn'),
     url(r'^api/risbn/(?P<isbn>[0-9]{10,13})$',api_views.get_book_by_isbn_for_add,name='api_get_by_isbn_add'),
 ]
