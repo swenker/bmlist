@@ -13,7 +13,7 @@ class Account(models.Model):
     email=models.CharField(max_length=60,null=True,blank=True)
     passwd=models.CharField(max_length=20)
     nickname=models.CharField(max_length=20,null=True,blank=True)
-    cellphone=models.CharField(max_length=20,null=True,blank=True)
+    # cellphone=models.CharField(max_length=20,null=True,blank=True)
     dtcreate=models.DateTimeField(auto_now_add=True)
     status=models.SmallIntegerField(default=1)
 
@@ -25,7 +25,9 @@ class Account(models.Model):
 
     def jsonable(self):
         return dict(id=self.id,
-                    email=self.email,passwd=self.passwd,nickname=self.nickname,cellphone=self.cellphone,dtcreate = self.dtcreate,
+                    email=self.email,passwd=self.passwd,nickname=self.nickname,
+                    # cellphone=self.cellphone,
+                    dtcreate = self.dtcreate,
                     status=self.status)
 
 

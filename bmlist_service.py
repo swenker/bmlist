@@ -129,22 +129,22 @@ class UserAccountService():
         if self.__is_email(login_id):
             email = login_id.lower()
             passwd=tomd5(passwd)
-            user = Account.objects.get(email=email.lower())
-            if user:
+            account = Account.objects.get(email=email.lower())
+            if account:
                 #TODO compare char by char?
-                if user.passwd == passwd:
-                    return user
+                if account.passwd == passwd:
+                    return account
         else:
             nickname = login_id
-            user = Account.objects.get(nickname = nickname)
-            if user:
-                if user.passwd == passwd:
-                    return user
+            account = Account.objects.get(nickname = nickname)
+            if account:
+                if account.passwd == passwd:
+                    return account
 
         return None
 
     def signup(self,account):
-        """new user"""
+        """new account"""
         passwd=tomd5(account.passwd)
         if not self.__exists(account.email,account.nickname):
             account.passwd = passwd
@@ -174,24 +174,25 @@ class UserAccountService():
         account.delete()
 
     def search_accounts(self, keyword, npage=1):
-        "If no keyword is passed in , the result is top new users recently signup."
+        "If no keyword is passed in , the result is top new accounts recently signup."
         account_list=None
         total_count=0
         total_pages=0
         N_EVERY_PAGE=2
 
         if keyword:
-            if __.match(keyword):
+            if self.__is_email(keyword):
                 book_list = Account.objects.filter(email = keyword)
-            elif isbn10_pattern.match(keyword):
-                book_list = Book.objects.filter(isbn10 = keyword)
-            else:
-                book_list = Book.objects.filter(Q(title__icontains = keyword)
-                                                | Q(publisher__icontains = keyword)
-                                                | Q(author__icontains = keyword)
-                                               )
+            else :
+                book_list = Account.objects.filter(nickname = keyword)
+            # else:
+            #     book_list = Account.objects.filter(Q(title__icontains = keyword)
+            #                                     | Q(publisher__icontains = keyword)
+            #                                     | Q(author__icontains = keyword)
+            #                                   )
         else:
             account_list = Account.objects.all().order_by('-create_time')
+
         if account_list:
             total_count = len(account_list)
             total_pages = (total_count+N_EVERY_PAGE-1)/N_EVERY_PAGE
