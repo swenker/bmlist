@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User signup</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'  %}"/>
+    <script type = "text/javascript" src="{% static 'jquery/jquery-1.11.3.min.js'  %}"></script>
+    <script type = "text/javascript" >
+
+    </script>
+</head>
+<body>
+<div style="padding:5px">
+        <form action="/usr/api/signup" method="post">
+        <div class="field">
+            <label for="id_usr_email">email：</label><input name="email" id="id_usr_email" size="40" maxlength="50">&nbsp;&nbsp;
+        </div>
+        <div class="field">
+            <label for="id_usr_nickname">笔名（可用于登录）：</label><input name="nickname" id="id_usr_nickname" size="20" maxlength="50">
+        </div>
+        <div class="field">
+            <label for="id_usr_passwd">passwd： </label><input name="passwd" id="id_usr_passwd" size="20" maxlength="30" type="password">&nbsp;&nbsp;
+        </div>
+
+        <div style="padding:10px"><button type="submit">保存</button></div>
+    </form>
+</div>
+</body>
+</html>

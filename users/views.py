@@ -21,11 +21,11 @@ def get_account_by_id(request, account_id):
 
 
 def signup(request):
-    return render(request, 'users/signup_form.html')
+    return render(request, 'users/signup.html')
 
 
 def signin(request):
-    return render(request, 'users/signin_form.html')
+    return render(request, 'users/signin.html')
 
 
 def get_param(request, param_name, default_value=None):

@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^list$',views.list,name='user_list'),
     url(r'^detail/(?P<account_id>[0-9]+)$',views.get_account_by_id,name='account_detail_id'),
     url(r'^signup$',views.signup,name='signup'),
+    url(r'^signin$',views.signin,name='signin'),
 
     #API goes here
     url(r'^api/search', api_views.search_account, name='api_book_list'),
