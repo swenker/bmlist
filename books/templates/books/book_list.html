@@ -13,7 +13,7 @@
 
         function fetch_book(){
             $.ajax({
-              url: "/books/api/search?k={{keyword}}&np={{npage}}",
+              url: "/bk/api/search?k={{keyword}}&np={{npage}}",
               success: function( result ) {
                  npage = result.npage;
                  total_pages = result.total_pages;
@@ -21,11 +21,11 @@
                 $("#total_pages").html("<string>"+total_pages+"</strong>");
 
                 div_list_header = $('#list_header');
-                prev_html=$("<span id='prev'><a href='/books/list?k={{keyword}}&np=" + (+npage - 1) + "'>< </a>&nbsp;&nbsp;</span>");
+                prev_html=$("<span id='prev'><a href='/bk/list?k={{keyword}}&np=" + (+npage - 1) + "'>< </a>&nbsp;&nbsp;</span>");
                 if(npage==1)
                     prev_html=$("<span id='prev'>< &nbsp;&nbsp;</span>");
 
-                next_html=$("<span id='next'><a href='/books/list?k={{keyword}}&np=" +(+npage + 1)+ "'> > </a></span>");
+                next_html=$("<span id='next'><a href='/bk/list?k={{keyword}}&np=" +(+npage + 1)+ "'> > </a></span>");
                 if (npage==total_pages)
                     next_html=$("<span id='next'> > </span>");
 
@@ -37,13 +37,13 @@
                 books.forEach(function(book){
                     div_book=$("<div style='padding:12px;border:1px;'></div>");
                     //div_book.append($("<div class='field'>BOOK_ID：<strong>" + book.id + "</strong></div>"));
-                    div_book.append($("<div class='field'>书&nbsp;&nbsp;&nbsp;&nbsp;名：<strong><a href='/books/detail/"+book.id+"'>" + book.title + "</a></strong></div>"));
+                    div_book.append($("<div class='field'>书&nbsp;&nbsp;&nbsp;&nbsp;名：<strong><a href='/bk/detail/"+book.id+"'>" + book.title + "</a></strong></div>"));
                     div_book.append($("<div class='field'>作者：<strong>" + book.author + "</strong></div>"));
                     div_book.append($("<div class='field'>译者：<strong>" + book.transtr + "</strong></div>"));
                     div_book.append($("<div class='field'>出版社：<strong>" + book.publisher + "</strong></div>"));
                     div_book.append($("<div class='field'>出版时间：<strong>" + book.pubdate + "</strong></div>"));
                     div_book.append($("<div class='field'>定&nbsp;&nbsp;&nbsp;&nbsp;价：<strong>" + book.price + "</strong></div>"));
-                    div_book.append($("<div class='field'><span>[<a href='/books/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/books/api/rm/"+book.id+"'>Delete</a>]</span></div>"));
+                    div_book.append($("<div class='field'><span>[<a href='/bk/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/bk/api/rm/"+book.id+"'>Delete</a>]</span></div>"));
                     div_book_list.append(div_book);
                 });
               },

@@ -10,7 +10,7 @@ from bmutils import get_POST_param
 # Create your views here.
 CONTENT_TYPE = "application/json;charset=UTF-8"
 
-
+"The api should be called within page instead of browser."
 def search_account(request):
     keyword = request.GET.get('k', None)
     npage = request.GET.get('np', 1)
@@ -64,6 +64,9 @@ def signin(request):
     login_id = get_POST_param(request, 'login_id')
 
     account = user_service.signin(passwd, login_id)
-    return HttpResponse("{'status':'OK'}"+account.id)
+    if account:
+        return HttpResponse("{'status':'OK'}--%d" %account.id)
+    else:
+        return HttpResponse("{'status':'No such user'}--%s" % login_id)
 
 

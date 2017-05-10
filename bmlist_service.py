@@ -121,25 +121,32 @@ class BookService():
 
 class UserAccountService():
     def __is_email(self,input_email):
-        if input_email.count('@') == 1:
+        if input_email and input_email.count('@') == 1:
             return True
         return False
 
     def signin(self,passwd,login_id):
+        passwd = tomd5(passwd)
         if self.__is_email(login_id):
             email = login_id.lower()
-            passwd=tomd5(passwd)
-            account = Account.objects.get(email=email.lower())
-            if account:
-                #TODO compare char by char?
-                if account.passwd == passwd:
-                    return account
+            try:
+                account = Account.objects.get(email=email.lower())
+                if account:
+                    #TODO compare char by char?
+                    if account.passwd == passwd:
+                        return account
+            except Account.DoesNotExist as dne:
+                return None
+
         else:
             nickname = login_id
             account = Account.objects.get(nickname = nickname)
-            if account:
-                if account.passwd == passwd:
-                    return account
+            try:
+                if account:
+                    if account.passwd == passwd:
+                        return account
+            except Account.DoesNotExist as dne:
+                return None
 
         return None
 
@@ -157,17 +164,16 @@ class UserAccountService():
 
     def __exists(self,email,nickname):
         email = email.lower()
-
         try:
             account = Account.objects.get(email = email)
             if account:
-                return True
-
+                return Account
+            else:
                 account = Account.objects.get(nickname = nickname)
             if account:
                 return True
 
-        except Account.DoesNotExist,dne:
+        except Account.DoesNotExist as dne:
             return False
 
     def delete_account(self,account_id):

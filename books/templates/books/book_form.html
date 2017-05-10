@@ -12,7 +12,7 @@
     {%if book_id%}
         function fetch_book(){
             $.ajax({
-              url: "/books/api/detail/{{ book_id }}",
+              url: "/bk/api/detail/{{ book_id }}",
               success: function( result ) {
                 book=result;
                 $( "#id_book_id_view" ).html("<strong>" + book.id + "</strong>"  );
@@ -44,9 +44,9 @@
 <body>
 <div style="padding:5px">
     {% if book_id %}
-        <form action="/books/api/update" method="post">
+        <form action="/bk/api/update" method="post">
             <input type="hidden" id="id_book_id" name="book_id">
-    {% else %}<form action="/books/api/create" method="post">{% endif%}
+    {% else %}<form action="/bk/api/create" method="post">{% endif%}
          {% csrf_token %}
 
         <div class="field" id="div_book_id">

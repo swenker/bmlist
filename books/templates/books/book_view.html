@@ -13,8 +13,8 @@
 
         function fetch_book(){
             $.ajax({
-              {% if book_id %}url: "/books/api/detail/{{ book_id }}",{% endif %}
-              {% if isbn %}url: "/books/api/isbn/{{ isbn }}",{% endif %}
+              {% if book_id %}url: "/bk/api/detail/{{ book_id }}",{% endif %}
+              {% if isbn %}url: "/bk/api/isbn/{{ isbn }}",{% endif %}
               success: function( result ) {
                 book=result;
                 //console.log(book);
@@ -31,7 +31,7 @@
                 $( "#id_book_pages" ).html( "<strong>" + book.pages + "</strong>" );
                 $( "#id_book_binding" ).html( "<strong>" + book.binding + "</strong>" );
 
-                $("#id_book_action").html("<span>[<a href='/books/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/books/api/rm/"+book.id+"'>Delete</a>]</span>");
+                $("#id_book_action").html("<span>[<a href='/bk/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/bk/api/rm/"+book.id+"'>Delete</a>]</span>");
 
               },
               error: function(msg){

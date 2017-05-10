@@ -66,21 +66,3 @@ class Book(models.Model):
             keywords=normalize_str(self.keywords), summary=normalize_str(self.summary),authorintro=normalize_str(self.authorintro)
         )
 
-class Comment:
-    title = models.CharField(max_length=60, null=True, blank=True)
-    content = models.CharField(max_length=2000, null=True, blank=True)
-
-    def __init__(self,title,content,ctime,uid):
-        self.title = title
-        self.content = content
-        self.ctime = None
-        self.uid = uid
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        return self.__unicode__().encode('utf8')
-
-    def jsonable(self):
-        return self.__dict__
