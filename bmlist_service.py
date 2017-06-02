@@ -189,16 +189,11 @@ class UserAccountService():
 
         if keyword:
             if self.__is_email(keyword):
-                book_list = Account.objects.filter(email = keyword)
+                account_list = Account.objects.filter(email = keyword)
             else :
-                book_list = Account.objects.filter(nickname = keyword)
-            # else:
-            #     book_list = Account.objects.filter(Q(title__icontains = keyword)
-            #                                     | Q(publisher__icontains = keyword)
-            #                                     | Q(author__icontains = keyword)
-            #                                   )
+                account_list = Account.objects.filter(nickname = keyword)
         else:
-            account_list = Account.objects.all().order_by('-create_time')
+            account_list = Account.objects.all().order_by('-dtcreate')
 
         if account_list:
             total_count = len(account_list)

@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Book List</title>
+    <title>User List</title>
 
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css'  %}"/>
     <script type = "text/javascript" src="{% static 'jquery/jquery-1.11.3.min.js'  %}"></script>
     <script type = "text/javascript" >
 
-        function fetch_book(){
+        function fetch_usr(){
             $.ajax({
-              url: "/books/api/search?k={{keyword}}&np={{npage}}",
+              url: "/usr/api/search?k={{keyword}}&np={{npage}}",
               success: function( result ) {
                  npage = result.npage;
                  total_pages = result.total_pages;
@@ -21,30 +21,27 @@
                 $("#total_pages").html("<string>"+total_pages+"</strong>");
 
                 div_list_header = $('#list_header');
-                prev_html=$("<span id='prev'><a href='/books/list?k={{keyword}}&np=" + (+npage - 1) + "'>< </a>&nbsp;&nbsp;</span>");
+                prev_html=$("<span id='prev'><a href='/usr/list?k={{keyword}}&np=" + (+npage - 1) + "'>< </a>&nbsp;&nbsp;</span>");
                 if(npage==1)
                     prev_html=$("<span id='prev'>< &nbsp;&nbsp;</span>");
 
-                next_html=$("<span id='next'><a href='/books/list?k={{keyword}}&np=" +(+npage + 1)+ "'> > </a></span>");
+                next_html=$("<span id='next'><a href='/usr/list?k={{keyword}}&np=" +(+npage + 1)+ "'> > </a></span>");
                 if (npage==total_pages)
                     next_html=$("<span id='next'> > </span>");
 
                 div_list_header.append(prev_html);
                 div_list_header.append(next_html);
-                div_book_list=$("#book_list");
+                div_usr_list=$("#user_list");
 
-                books=result.itemlist;
-                books.forEach(function(book){
-                    div_book=$("<div style='padding:12px;border:1px;'></div>");
-                    //div_book.append($("<div class='field'>BOOK_ID：<strong>" + book.id + "</strong></div>"));
-                    div_book.append($("<div class='field'>书&nbsp;&nbsp;&nbsp;&nbsp;名：<strong><a href='/books/detail/"+book.id+"'>" + book.title + "</a></strong></div>"));
-                    div_book.append($("<div class='field'>作者：<strong>" + book.author + "</strong></div>"));
-                    div_book.append($("<div class='field'>译者：<strong>" + book.transtr + "</strong></div>"));
-                    div_book.append($("<div class='field'>出版社：<strong>" + book.publisher + "</strong></div>"));
-                    div_book.append($("<div class='field'>出版时间：<strong>" + book.pubdate + "</strong></div>"));
-                    div_book.append($("<div class='field'>定&nbsp;&nbsp;&nbsp;&nbsp;价：<strong>" + book.price + "</strong></div>"));
-                    div_book.append($("<div class='field'><span>[<a href='/books/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/books/api/rm/"+book.id+"'>Delete</a>]</span></div>"));
-                    div_book_list.append(div_book);
+                usrs=result.itemlist;
+                usrs.forEach(function(usr){
+                    div_usr=$("<div style='padding:12px;border:1px;'></div>");
+                    <!--//div_usr.append($("<div class='field'>Account_ID：<strong>" + usr.id + "</strong></div>"));-->
+                    div_usr.append($("<div class='field'><a href='/usrs/detail/"+usr.id+"'>" + usr.nickname + "</a></div>"));
+                    div_usr.append($("<div class='field'>出版时间：<strong>" + usr.email + "</strong></div>"));
+                    div_usr.append($("<div class='field'>" + usr.dtcreate + "</div>"));
+                    div_usr.append($("<div class='field'><span>[<a href='/usrs/edit/"+usr.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/usr/api/rm/"+usr.id+"'>Delete</a>]</span></div>"));
+                    div_usr_list.append(div_usr);
                 });
               },
               error: function(msg){
@@ -54,7 +51,7 @@
             });
         }
 
-       $(document).ready(fetch_book);
+       $(document).ready(fetch_usr);
 
     </script>
 
@@ -66,7 +63,7 @@
 
 
         </div>
-        <div id="book_list">
+        <div id="user_list">
 
         </div>
 

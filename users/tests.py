@@ -22,3 +22,5 @@ class UserTestCases(TestCase):
         print (account)
         self.assertEqual(account_id,account.id)
 
+    def test_list_accounts(self):
+        print(self.user_account_service.search_accounts(keyword=''))

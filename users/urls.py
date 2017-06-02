@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^signin$',views.signin,name='signin'),
 
     #API goes here
-    url(r'^api/search', api_views.search_account, name='api_book_list'),
+    url(r'^api/search', api_views.search_account, name='api_account_list'),
     url(r'^api/detail/(?P<account_id>[0-9]+)$', api_views.get_account_by_id, name='api_account_detail'),
     url(r'^api/rm/(?P<book_id>[0-9]+)$',api_views.delete_account, name='api_delete_account'),
     url(r'^api/signup',api_views.signup, name='api_signup'),

@@ -12,7 +12,7 @@ def list(request):
     keyword = request.GET.get('k', '')
     npage = request.GET.get('np', 1)
     context = {'keyword': keyword, "npage": npage}
-    return render(request, 'users/account_list.html', context)
+    return render(request, 'users/user_list.html', context)
 
 
 def get_account_by_id(request, account_id):
