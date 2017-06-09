@@ -20,5 +20,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^bk/', include('books.urls')),
-    url(r'^usr/', include('users.urls'))
+    url(r'^usr/', include('users.urls')),
+    url(r'^xnote/', include('xnote.urls'))
 ]

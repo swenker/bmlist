@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>view note</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'  %}"/>
+    <script type = "text/javascript" src="{% static 'jquery/jquery-1.11.3.min.js'  %}"></script>
+    <script type = "text/javascript" src="{% static 'jquery/jquery.form.js'  %}"></script>
+    <script type = "text/javascript" >
+        function load_note(){
+              $.ajax({
+                  url: "/xnote/api/detail/"+{{ note_id }},
+                  success: function( result ) {
+                     $("#id_note_id").val(result.id);
+                     $("#id_title").val(result.title);
+                     $("#id_content").val(result.content);
+                  },
+                  error: function(msg){
+                    console.log(msg);
+                  }
+              });
+
+        }
+        function save_note(){
+            $("#id_btn_save").attr("disabled","true");
+            $("#note_form").ajaxSubmit({
+              <!--url: "/xnote/api/save_note",-->
+              success: function( result ) {
+                account=result;
+                $( "#id_note_id" ).val(result.note_id);
+              },
+              error: function(msg){
+                console.log(msg);
+              }
+
+            });
+
+            $("#id_btn_save").attr("disabled",false);
+
+            return false;
+        }
+
+        {% if note_id %}
+            $(document).ready(load_note());
+        {% endif %}
+
+    </script>
+</head>
+<body>
+<div style="padding:5px" id="id_div_note">
+        <form action="/xnote/api/save" method="post" id="note_form" onsubmit="return save_note()">
+            {% csrf_token %}
+            <input type="hidden" id="id_note_id" name="note_id" value="">
+        <div class="field">
+            <!--<label for="id_title">title：</label>-->
+            <input name="title" id="id_title" size="20" maxlength="50" style="height:30px" ><button type="submit" id="id_btn_save_top">Save</button>
+        </div>
+        <div class="field">
+            <!--<label for="id_content">content：</label>-->
+            <textarea name="content" id="id_content" cols="35" rows="10"></textarea>
+        </div>
+        <div style="padding:10px"><button type="submit" id="id_btn_save">Save</button>&nbsp;<button type="reset" id="id_btn_reset">Clear</button>
+            &nbsp;&nbsp; <a href="/xnote/add">New</a> &nbsp;&nbsp; <a href="/xnote/list">List</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

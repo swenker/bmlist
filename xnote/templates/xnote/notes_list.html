@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Note List</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css'  %}"/>
+    <script type = "text/javascript" src="{% static 'jquery/jquery-1.11.3.min.js'  %}"></script>
+    <script type = "text/javascript" >
+
+        function fetch_list(){
+            $.ajax({
+              url: "/xnote/api/search?k={{keyword}}&np={{npage}}",
+              success: function( result ) {
+                 npage = result.npage;
+                 total_pages = result.total_pages;
+                $("#total_counter").html("<string>"+result.total+"</strong>");
+                $("#total_pages").html("<string>"+total_pages+"</strong>");
+
+                div_list_header = $('#list_header');
+                prev_html=$("<span id='prev'><a href='/xnote/list?k={{keyword}}&np=" + (+npage - 1) + "'>< </a>&nbsp;&nbsp;</span>");
+                if(npage==1)
+                    prev_html=$("<span id='prev'>< &nbsp;&nbsp;</span>");
+
+                next_html=$("<span id='next'><a href='/xnote/list?k={{keyword}}&np=" +(+npage + 1)+ "'> > </a></span>");
+                if (npage==total_pages)
+                    next_html=$("<span id='next'> > </span>");
+
+                div_list_header.append(prev_html);
+                div_list_header.append(next_html);
+                div_note_list=$("#notes_list");
+
+                notes=result.itemlist;
+                notes.forEach(function(note){
+                    div_note=$("<div style='padding:12px;border:1px;'></div>");
+                    div_note.append($("<div class='field'>" + note.title +"&nbsp;<span class=f12>" + note.update_time + "</span></div>"));
+                    div_note.append($("<div class='field'><span>[<a href='/xnote/edit/"+note.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/xnote/api/rm/"+note.id+"'>Delete</a>]</span></div>"));
+                    div_note_list.append(div_note);
+                });
+              },
+              error: function(msg){
+                console.log(msg);
+              }
+
+            });
+        }
+
+       $(document).ready(fetch_list);
+
+    </script>
+
+
+</head>
+<body>
+    <div>
+        <div id="list_header">[<span id="total_counter"></span>]共<span id="total_pages"></span>页&nbsp;&nbsp; <span class="f12"><a href="add">New</a>
+        By Year&nbsp;Month Week Day</span>
+        </div>
+        <div id="notes_list">
+
+        </div>
+
+    </div>
+</body>
+</html>

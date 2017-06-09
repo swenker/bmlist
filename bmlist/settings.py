@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'books.apps.BooksConfig',
     'users.apps.UsersConfig',
+    'xnote.apps.XnoteConfig',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -88,6 +89,7 @@ DATABASES = {
         'PASSWORD': 'bmlist_u01',
         'HOST': 'centos.blurdev.com',
         'PORT': '3306',
+        'OPTIONS':{"init_command":"SET storage_engine=InnoDB"},
     },
 }
 

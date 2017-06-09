@@ -16,13 +16,17 @@ def get_GET_param(request, param_name, default_value=None):
     # print("%s:%s" %(param_name,val))
     if val:
         val = val.strip()
+    else:
+        val = default_value
     return val
 
 def get_POST_param(request, param_name, default_value=None):
     val = request.POST.get(param_name, default_value)
-    print ("%s:%s" % (param_name, val))
+    # print ("%s:%s" % (param_name, val))
     if val:
         val = val.strip()
+    else:
+        val = default_value
     return val
 
 
