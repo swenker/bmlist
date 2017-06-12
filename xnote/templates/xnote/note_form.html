@@ -12,7 +12,9 @@
     <script type = "text/javascript" >
         function load_note(){
               $.ajax({
-                  url: "/xnote/api/detail/"+{{ note_id }},
+                  {% if note_id %}
+                      url: "/xnote/api/detail/"+{{ note_id }},
+                  {% endif %}
                   success: function( result ) {
                      $("#id_note_id").val(result.id);
                      $("#id_title").val(result.title);
@@ -22,8 +24,8 @@
                     console.log(msg);
                   }
               });
-
         }
+
         function save_note(){
             $("#id_btn_save").attr("disabled","true");
             $("#note_form").ajaxSubmit({
@@ -39,7 +41,7 @@
             });
 
             $("#id_btn_save").attr("disabled",false);
-
+            $("#notification").text("Success");
             return false;
         }
 
@@ -51,7 +53,8 @@
 </head>
 <body>
 <div style="padding:5px" id="id_div_note">
-        <form action="/xnote/api/save" method="post" id="note_form" onsubmit="return save_note()">
+    <div id="notification"></div>
+    <form action="/xnote/api/save" method="post" id="note_form" onsubmit="return save_note()">
             {% csrf_token %}
             <input type="hidden" id="id_note_id" name="note_id" value="">
         <div class="field">

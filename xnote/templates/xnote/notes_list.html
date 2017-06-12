@@ -13,12 +13,12 @@
 
         function fetch_list(){
             $.ajax({
-              url: "/xnote/api/search?k={{keyword}}&np={{npage}}",
+              url: "/xnote/api/search?k={{k}}&np={{np}}",
               success: function( result ) {
                  npage = result.npage;
                  total_pages = result.total_pages;
-                $("#total_counter").html("<string>"+result.total+"</strong>");
-                $("#total_pages").html("<string>"+total_pages+"</strong>");
+                $("#total_counter").html("<strong>"+result.total+"</strong>");
+                $("#total_pages").html("<strong>"+total_pages+"</strong>");
 
                 div_list_header = $('#list_header');
                 prev_html=$("<span id='prev'><a href='/xnote/list?k={{keyword}}&np=" + (+npage - 1) + "'>< </a>&nbsp;&nbsp;</span>");
@@ -36,7 +36,8 @@
                 notes=result.itemlist;
                 notes.forEach(function(note){
                     div_note=$("<div style='padding:12px;border:1px;'></div>");
-                    div_note.append($("<div class='field'>" + note.title +"&nbsp;<span class=f12>" + note.update_time + "</span></div>"));
+                    div_note.append($("<div class='field'>" + note.title +"&nbsp;<span class=f12>[" + note.update_time + "]</span></div>"));
+                    div_note.append($("<div class='field'>" + note.content +"</div>"));
                     div_note.append($("<div class='field'><span>[<a href='/xnote/edit/"+note.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/xnote/api/rm/"+note.id+"'>Delete</a>]</span></div>"));
                     div_note_list.append(div_note);
                 });
@@ -56,7 +57,7 @@
 </head>
 <body>
     <div>
-        <div id="list_header">[<span id="total_counter"></span>]共<span id="total_pages"></span>页&nbsp;&nbsp; <span class="f12"><a href="add">New</a>
+        <div id="list_header" class="f12">[<span id="total_counter"></span>]共<span id="total_pages"></span>页&nbsp;&nbsp; <span ><a href="add">New</a>
         By Year&nbsp;Month Week Day</span>
         </div>
         <div id="notes_list">

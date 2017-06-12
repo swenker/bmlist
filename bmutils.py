@@ -14,7 +14,7 @@ def get_now():
 def get_GET_param(request, param_name, default_value=None):
     val = request.GET.get(param_name,default_value)
     # print("%s:%s" %(param_name,val))
-    if val:
+    if val and isinstance(val,basestring):
         val = val.strip()
     else:
         val = default_value
@@ -23,7 +23,7 @@ def get_GET_param(request, param_name, default_value=None):
 def get_POST_param(request, param_name, default_value=None):
     val = request.POST.get(param_name, default_value)
     # print ("%s:%s" % (param_name, val))
-    if val:
+    if val and isinstance(val, basestring):
         val = val.strip()
     else:
         val = default_value

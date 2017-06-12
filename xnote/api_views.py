@@ -18,7 +18,7 @@ def list_notes(request):
     return JsonResponse( PaginationListWrapper(note_list, total_count, total_pages, npage).jsonable(),content_type=CONTENT_TYPE)
 
 def search_notes(request):
-    keyword = get_GET_param(request,'k',None)
+    keyword = get_GET_param(request,'k','')
     npage = get_GET_param(request,'np',1)
     uid = 1
     total_count, total_pages, note_list = xnote_service.search_notes(uid,keyword=keyword,npage=npage)
@@ -47,6 +47,9 @@ def save_note(request):
     else:
         note = XNote()
         note.create_time = get_now()
+
+        #TODO
+        note.uid=1
     try:
         note.title = get_POST_param(request,'title')
         note.content = get_POST_param(request,'content')

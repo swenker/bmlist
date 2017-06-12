@@ -1,11 +1,18 @@
 from django.shortcuts import render
 
 # Create your views here.
+from bmutils import get_GET_param
+
+
 def index(request):
     return render(request,"xnote/index.html")
 
 def list_notes(request):
-    return render(request,'xnote/notes_list.html')
+    keyword = get_GET_param(request,'k','')
+    npage = get_GET_param(request,'np',1)
+
+    context={'k':keyword,'np':npage}
+    return render(request,'xnote/notes_list.html',context)
 
 def new_note(request):
     return render(request,'xnote/note_form.html')

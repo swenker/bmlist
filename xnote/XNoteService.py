@@ -8,18 +8,19 @@ class XNoteService():
     def search_notes(self, uid, keyword=None, npage=1):
         total_count = 0
         total_pages = 0
-        N_EVERY_PAGE = 2
+        N_EVERY_PAGE = 5
+        common_filter = XNote.objects.filter(uid=uid)
         if keyword:
-            note_list = XNote.objects.filter(uid=uid) \
-                .filter(Q(title__icontains=keyword) | Q(content__icontains=keyword)) \
+            note_list = common_filter.filter(Q(title__icontains=keyword) | Q(content__icontains=keyword)) \
                 .order_by('-update_time')
         else:
-            note_list = XNote.objects.filter(uid=uid).order_by('-update_time')
+            note_list = common_filter.order_by('-update_time')
 
         total_count = len(note_list)
         total_pages = (total_count + N_EVERY_PAGE - 1) / N_EVERY_PAGE
 
         paginator = Paginator(note_list, N_EVERY_PAGE)
+        # print("npages:%d" %npage)
         note_list = paginator.page(npage)
 
         return total_count, total_pages, note_list
