@@ -1,4 +1,5 @@
 __author__ = 'wenjusun'
+import hashlib
 
 from datetime import datetime
 def normalize_str(str):
@@ -6,6 +7,10 @@ def normalize_str(str):
         return str.strip()
     else:
         return ""
+
+def tomd5(s):
+    md5handler=hashlib.md5(s)
+    return md5handler.hexdigest()
 
 
 def get_now():

@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseServerError
 from django.http import JsonResponse
 from django.http import Http404
 
-from  bmlist_service import book_service
+from books.book_service import book_service
 from books.models import Book
 from bmutils import PaginationListWrapper
 from bmutils import get_POST_param,get_GET_param

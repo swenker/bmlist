@@ -13,7 +13,7 @@
 
         function fetch_book(){
             $.ajax({
-              url: "/book/api/search?k={{keyword}}&np={{npage}}",
+              url: "/bc/api/book/search?k={{keyword}}&np={{npage}}",
               success: function( result ) {
                  npage = result.npage;
                  total_pages = result.total_pages;
@@ -37,13 +37,14 @@
                 books.forEach(function(book){
                     div_book=$("<div style='padding:12px;border:1px;'></div>");
                     //div_book.append($("<div class='field'>BOOK_ID：<strong>" + book.id + "</strong></div>"));
-                    div_book.append($("<div class='field'>书&nbsp;&nbsp;&nbsp;&nbsp;名：<strong><a href='/book/detail/"+book.id+"'>" + book.title + "</a></strong></div>"));
+                    div_book.append($("<div class='field'>书&nbsp;&nbsp;&nbsp;&nbsp;名：<strong><a href='/bk/detail/"+book.id+"'>" + book.title + "</a></strong></div>"));
                     div_book.append($("<div class='field'>作者：<strong>" + book.author + "</strong></div>"));
                     <!--div_book.append($("<div class='field'>译者：<strong>" + book.transtr + "</strong></div>"));-->
                     div_book.append($("<div class='field'>出版社：<strong>" + book.publisher + "</strong></div>"));
                     div_book.append($("<div class='field'>出版时间：<strong>" + book.pubdate + "</strong></div>"));
                     div_book.append($("<div class='field'>定&nbsp;&nbsp;&nbsp;&nbsp;价：<strong>" + book.price + "</strong></div>"));
-                    div_book.append($("<div class='field'><span>[<a href='/book/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/book/api/rm/"+book.id+"'>Delete</a>]</span></div>"));
+                    <!--div_book.append($("<div class='field'><span>[<a href='/bk/edit/"+book.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/bk/api/rm/"+book.id+"'>Delete</a>]</span></div>"));-->
+                    div_book.append($("<div class='field'><span>[<a href='/bk/api/rm/"+book.id+"'>Remove</a>]</span></div>"));
                     div_book_list.append(div_book);
                 });
               },

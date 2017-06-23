@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseServerError
 from django.http import JsonResponse
 from django.http import Http404
 
-from bmlist_service import user_service
+from users.user_service import user_service
 from users.models import *
 from bmutils import PaginationListWrapper
 from bmutils import get_POST_param

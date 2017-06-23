@@ -19,7 +19,7 @@
             $("#result").hide();
             isbn = $("#isbn").val();
             $.ajax({
-              url: "/books/api/risbn/"+isbn,
+              url: "/book/api/risbn/"+isbn,
               success: function( result ) {
                 book=result;
                 //console.log(book);
@@ -39,12 +39,12 @@
                 $( "#id_book_binding" ).val(book.binding );
 
                 if(book.id && book.id!=''){
-                    $("#book_form").attr('action','/books/api/update');
+                    $("#book_form").attr('action','/book/api/update');
                     $("#id_book_id").val(book.id);
                     $("#book_note").html("It's in the shelf with BOOK_ID：<strong>" + book.id + "</strong>");
                 }
                 else{
-                    $("#book_form").attr('action','/books/api/create');
+                    $("#book_form").attr('action','/book/api/create');
                 }
 
                 $("#result").show();

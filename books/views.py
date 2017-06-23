@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from bmutils import *
 # Create your views here.
 
 def index(request):
@@ -7,8 +7,8 @@ def index(request):
     return render(request,'books/index.html',context)
 
 def list(request):
-    keyword = request.GET.get('k','')
-    npage = request.GET.get('np',1)
+    keyword = get_GET_param(request,'k','')
+    npage = get_GET_param(request,'np',1)
     context={'keyword':keyword,"npage":npage}
     return render(request,'books/book_list.html',context)
 

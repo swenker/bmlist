@@ -24,3 +24,5 @@ class Comment(models.Model):
 
     def jsonable(self):
         return self.__dict__
+
+

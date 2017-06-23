@@ -37,7 +37,7 @@ class UserProfile():
     # id=0
     brief = models.CharField(max_length=100, null=True, blank=True)
     #TODO foreign key?
-    account_id = models.IntegerField(null=False)
+    account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.__unicode__().encode('utf8')
