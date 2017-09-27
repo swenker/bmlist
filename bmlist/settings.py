@@ -25,8 +25,7 @@ SECRET_KEY = '%kg#92ey07p%cva6z4x6@s&%mmevt9%237wy)yob(cybim)d^)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['bmlist.yinyushijing.cn','s002.blurdev.com']
 
 # Application definition
 

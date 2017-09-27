@@ -53,7 +53,7 @@
 </head>
 <body>
 <div style="padding:5px" id="id_div_note">
-    <div id="notification"></div>
+    <div id="notification" style="font-size:12px;color:#FF0000"></div>
     <form action="/xnote/api/save" method="post" id="note_form" onsubmit="return save_note()">
             {% csrf_token %}
             <input type="hidden" id="id_note_id" name="note_id" value="">
