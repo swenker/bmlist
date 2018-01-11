@@ -16,14 +16,18 @@ class XNoteService():
         else:
             note_list = common_filter.order_by('-update_time')
 
-        total_count = len(note_list)
-        total_pages = (total_count + N_EVERY_PAGE - 1) / N_EVERY_PAGE
+        if npage:
+            total_count = len(note_list)
+            total_pages = (total_count + N_EVERY_PAGE - 1) / N_EVERY_PAGE
 
-        paginator = Paginator(note_list, N_EVERY_PAGE)
-        # print("npages:%d" %npage)
-        note_list = paginator.page(npage)
+            paginator = Paginator(note_list, N_EVERY_PAGE)
+            # print("npages:%d" %npage)
+            note_list = paginator.page(npage)
 
-        return total_count, total_pages, note_list
+            return total_count, total_pages, note_list
+        else:
+            #return all the items if no npage is given? TODO
+            return total_count, total_pages, note_list
 
     def save_notes(self, note):
         note.save()

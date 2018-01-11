@@ -26,6 +26,13 @@ def search_notes(request):
 
     return JsonResponse( PaginationListWrapper(note_list, total_count, total_pages, npage).jsonable(),content_type=CONTENT_TYPE)
 
+def export_notes(request):
+    keyword = ''
+    uid = 1
+    total_count, total_pages, note_list = xnote_service.search_notes(uid,keyword=keyword,npage=None)
+    return JsonResponse( PaginationListWrapper(note_list, total_count, total_pages, 0).jsonable(),content_type=CONTENT_TYPE)
+
+
 def get_note_by_id(request,note_id):
     note  = xnote_service.load_note(note_id)
     if note:

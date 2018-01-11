@@ -29,8 +29,13 @@
                 if (npage==total_pages)
                     next_html=$("<span id='next'> > </span>");
 
-                div_list_header.append(prev_html);
-                div_list_header.append(next_html);
+                div_list_header.append(prev_html.clone());
+                div_list_header.append(next_html.clone());
+
+                div_list_footer = $('#list_footer');
+                div_list_footer.append(prev_html);
+                div_list_footer.append(next_html);
+
                 div_note_list=$("#notes_list");
 
                 notes=result.itemlist;
@@ -41,6 +46,7 @@
                     div_note.append($("<div class='field'><span>[<a href='/xnote/edit/"+note.id+"'>Edit</a>]</span>&nbsp;&nbsp;<span>[<a href='/xnote/api/rm/"+note.id+"'>Delete</a>]</span></div>"));
                     div_note_list.append(div_note);
                 });
+
               },
               error: function(msg){
                 console.log(msg);
@@ -57,11 +63,17 @@
 </head>
 <body>
     <div>
-        <div id="list_header" class="f12">[<span id="total_counter"></span>]共<span id="total_pages"></span>页&nbsp;&nbsp; <span ><a href="add">New</a>
-        By Year&nbsp;Month Week Day</span>
+        <div id="list_header" class="f12">[<span id="total_counter">
+
+        </span>]共<span id="total_pages"></span>页&nbsp;&nbsp;<span ><a href="add">New</a>
+        Year&nbsp;Month Week Day</span>
         </div>
         <div id="notes_list">
 
+        </div>
+
+        <div id="list_footer" class="f12">
+            <span ><a href="add">New</a>Year&nbsp;Month Week Day</span>
         </div>
 
     </div>

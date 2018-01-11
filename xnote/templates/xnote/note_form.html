@@ -33,6 +33,8 @@
               success: function( result ) {
                 account=result;
                 $( "#id_note_id" ).val(result.note_id);
+                $("#id_btn_save").attr("disabled",false);
+                $("#notification").text("Success {% now "Y-m-d H:i:s "%}");
               },
               error: function(msg){
                 console.log(msg);
@@ -40,8 +42,7 @@
 
             });
 
-            $("#id_btn_save").attr("disabled",false);
-            $("#notification").text("Success");
+
             return false;
         }
 

@@ -22,6 +22,7 @@ urlpatterns = [
     #API goes here
     url(r'^api/list$', api_views.list_notes, name='api_list_notes'),
     url(r'^api/search$', api_views.search_notes, name='api_search_notes'),
+    url(r'^api/export$', api_views.export_notes, name='api_export_notes'),
 
     #the P name should be the same as those in the method signature
     url(r'^api/detail/(?P<note_id>[0-9]+)$', api_views.get_note_by_id, name='get_note_by_id'),
