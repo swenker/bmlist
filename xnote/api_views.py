@@ -1,3 +1,5 @@
+
+from datetime import datetime
 from django.http import HttpResponse, HttpResponseServerError
 from django.http import JsonResponse
 from django.http import Http404
@@ -62,7 +64,8 @@ def save_note(request):
         note.content = get_POST_param(request,'content')
         note.update_time = get_now()
         xnote_service.save_notes(note)
-        return HttpResponse('{"note_id":%d}'%note.id,content_type=CONTENT_TYPE)
+        result_str= '{"note_id":%d,"dt":"%s"}' %(note.id,datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        return HttpResponse(result_str,content_type=CONTENT_TYPE)
 
     except AttributeError,be:
         print be

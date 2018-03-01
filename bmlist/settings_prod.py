@@ -25,7 +25,7 @@ SECRET_KEY = '%kg#92ey07p%cva6z4x6@s&%mmevt9%237wy)yob(cybim)d^)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bmlist.yinyushijing.cn','s002.blurdev.com']
+ALLOWED_HOSTS = ['bmlist.yinyushijing.cn']
 
 # Application definition
 
@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'bmlist',
         'USER': 'bmlist',
         'PASSWORD': 'bmlist_u01',
-        'HOST': 'centos.blurdev.com',
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS':{"init_command":"SET storage_engine=InnoDB"},
     },
@@ -131,7 +131,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '/var/www/html/static'
+#STATIC_ROOT = '/var/www/html/static'
+STATIC_ROOT = '/var/bmlist/www/html/static'  # for production
 STATIC_URL = '/static/'
 
 # LOGGING = {

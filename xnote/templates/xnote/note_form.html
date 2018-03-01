@@ -31,10 +31,9 @@
             $("#note_form").ajaxSubmit({
               <!--url: "/xnote/api/save_note",-->
               success: function( result ) {
-                account=result;
                 $( "#id_note_id" ).val(result.note_id);
                 $("#id_btn_save").attr("disabled",false);
-                $("#notification").text("Success {% now "Y-m-d H:i:s "%}");
+                $("#notification").text("Success "+result.dt);
               },
               error: function(msg){
                 console.log(msg);
